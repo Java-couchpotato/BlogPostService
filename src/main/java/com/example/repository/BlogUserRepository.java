@@ -9,4 +9,6 @@ public interface BlogUserRepository extends JpaRepository<BlogUser,Long> {
 
     @Override
     Optional<BlogUser> findById(Long id);
+
+    BlogUser findByUsername(String username);
 }

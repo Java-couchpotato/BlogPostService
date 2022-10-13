@@ -38,4 +38,7 @@ public class BlogUser {
     @Column(name = "account_status")
     @Enumerated(EnumType.STRING)
     private AccountStatus accountStatus;
+
+    public BlogUser(String authorFirstName, String authorLastName, String authorUsername) {
+    }
 }

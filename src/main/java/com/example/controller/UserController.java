@@ -2,7 +2,7 @@ package com.example.controller;
 
 import com.example.dto.user_response.AuthorResponseDTO;
 import com.example.dto.user_response.AuthorWithArticlesResponseDTO;
-import com.example.service.UserService;
+import com.example.service.BlogUserService;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,7 +17,7 @@ import java.util.List;
 public class UserController {
 
     @Autowired
-    private UserService userService;
+    private BlogUserService userService;
 
     @GetMapping
     public List<AuthorResponseDTO>showAuthors(){

@@ -28,4 +28,7 @@ public class BlogUserPassword {
     @OneToOne
     @JoinColumn(name = "user_blog_user_id")
     private BlogUser user;
+
+    public BlogUserPassword(BlogUser blogUser, String password, String salt) {
+    }
 }

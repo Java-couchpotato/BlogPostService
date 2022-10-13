@@ -6,7 +6,7 @@ import com.example.dto.user_response.AuthorWithArticlesResponseDTO;
 
 import java.util.List;
 
-public interface UserService {
+public interface BlogUserService {
 
     public List<AuthorResponseDTO> showAuthorsByArticlesCount();
 
