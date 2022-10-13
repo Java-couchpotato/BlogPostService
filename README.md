@@ -58,58 +58,6 @@ Shows posts with any status |  |
 Shows only posts with status PUBLISHED |  |
 | /posts/:id | DELETE |  |  | Delete the post |  |
 
-## Author API
-
-| URL | Method | Request | Response | Description | Description after Spring Security |
-| --- | --- | --- | --- | --- | --- |
-| /authors | GET |  | [
-- author id
-- author first name
-- author last name
-- author username
-- blogs count
-] | Shows authors, order by articles count (desc)
-
-Count articles with status PUBLISHED only
-
-If there are 6 articles: 
-- 2 published
-- 1 unpublished
-- 3 blocked
-
-Total articles: 2 |  |
-| /authors/:id | GET |  | - author id
-- author first name
-- author last name
-- author username
-- blogs [
-   blog id
-   blog title
-] | Shows author and their articles (order by created date desc)
-
-Show articles with status PUBLISHED only
-
-If there are 6 articles: 
-- 2 published
-- 1 unpublished
-- 3 blocked
-
-Show only: 2 published |  |
-
-## Entry API
-
-| URL | Method | Request | Response | Description | Description after Spring Security |
-| --- | --- | --- | --- | --- | --- |
-| /entry/registration | POST | - first name
-- last name
-- username
-- password |  | Creates BlogUser  |  |
-| /entry/login | POST | - username
-- password | Bearer JWT token |  | Session token |
-| /entry/logout | PUT
-
-Authorization Header |  |  |  | Deprecate/Expire JWT token  |
-
 # Stack
 
 - Lombok
