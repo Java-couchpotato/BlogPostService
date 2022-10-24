@@ -1,16 +1,17 @@
 package com.example.controller;
 
-import com.example.dto.blogpost_request.PostCreateRequestDTO;
-import com.example.dto.blogpost_request.PostSearchRequestDTO;
-import com.example.dto.blogpost_request.PostUpdateRequestDTO;
-import com.example.dto.blogpost_response.BlogPostCreateResponseDTO;
-import com.example.dto.blogpost_response.BlogPostResponseByIdDTO;
-import com.example.dto.blogpost_response.BlogPostSearchResponseDTO;
+import com.example.dto.request.PostCreateRequestDTO;
+import com.example.dto.request.PostSearchRequestDTO;
+import com.example.dto.request.PostUpdateRequestDTO;
+import com.example.dto.response.BlogPostCreateResponseDTO;
+import com.example.dto.response.BlogPostResponseByIdDTO;
+import com.example.dto.response.BlogPostSearchResponseDTO;
 import com.example.entity.PostStatus;
 import com.example.service.PostService;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -25,8 +26,7 @@ public class PostController {
 
     @GetMapping
     public List<BlogPostSearchResponseDTO> showPosts() {
-
-        return blogPostService.findPosts();
+        return blogPostService.findLatestPosts();
     }
 
     @PostMapping("/create")
@@ -39,9 +39,9 @@ public class PostController {
 
     @PostMapping("/search")
     public List<BlogPostSearchResponseDTO> searchPost(
-            @RequestBody List<PostSearchRequestDTO> requestDTO) {
+            @RequestBody PostSearchRequestDTO requestDTO) {
 
-        return blogPostService.search(requestDTO);
+        return blogPostService.searchPosts(requestDTO);
     }
 
     @GetMapping("{id}")
@@ -53,10 +53,9 @@ public class PostController {
 
     @PatchMapping("/{id}")
     public void updateArticle(
-            @PathVariable Long blogId,
-            @RequestBody PostUpdateRequestDTO updateRequestDTO) {
+            @RequestBody PostUpdateRequestDTO updateRequestDTO, @PathVariable Long id) {
 
-        blogPostService.update(updateRequestDTO, blogId);
+        blogPostService.update(updateRequestDTO, id);
     }
 
     @PutMapping("/{id}/{status}")
@@ -87,14 +86,16 @@ public class PostController {
     public List<BlogPostSearchResponseDTO> showPostByUser(
             @PathVariable String username
     ) {
-        return blogPostService.showArticlesByUser(username);
+        return blogPostService.showArticlesByUserName(username);
     }
+
+    @PreAuthorize("hasAuthority('ADMIN')||#id==authentication.principal.blogUser.id")
     @DeleteMapping("/{id}")
     public void deleteArticle(
-            @PathVariable Long postId
+            @PathVariable Long id
           ) {
 
-        blogPostService.deleteById(postId);
+        blogPostService.deleteById(id);
     }
 
 }

@@ -1,7 +1,7 @@
-package com.example.dto.blogpost_response;
+package com.example.dto.response;
 
 import com.example.entity.AccountStatus;
-import com.example.entity.BlogUser;
+import com.example.entity.BlogAuthor;
 import com.example.entity.PostStatus;
 import lombok.*;
 
@@ -24,6 +24,6 @@ public class BlogPostResponseByIdDTO {
     Instant updatedDate;
     Instant createdDate;
 
-    public BlogPostResponseByIdDTO(Long id, String title, String body, Set<String> tags, BlogUser author, PostStatus status, Instant updatedOn, Instant createdOn) {
+    public BlogPostResponseByIdDTO(Long id, String title, String body, Set<String> tags, BlogAuthor author, PostStatus status, Instant updatedOn, Instant createdOn) {
     }
 }

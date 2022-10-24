@@ -1,17 +1,20 @@
-package com.example.dto.user_response;
+package com.example.dto.response;
 
 import lombok.*;
+
+import java.util.List;
 
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
 @Setter
 @Builder
-public class AuthorResponseDTO {
+public class AuthorWithArticlesResponseDTO {
 
     public Long authorId;
     public String authorFirstName;
     public String authorLastName;
     public String authorUsername;
-    public int blogsCount;
+    public List<BlogPostSearchResponseDTO> blogs;
+
 }

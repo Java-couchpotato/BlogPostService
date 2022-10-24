@@ -27,8 +27,8 @@ public class BlogUserPassword {
 
     @OneToOne
     @JoinColumn(name = "user_blog_user_id")
-    private BlogUser user;
+    private BlogAuthor user;
 
-    public BlogUserPassword(BlogUser blogUser, String password, String salt) {
+    public BlogUserPassword(BlogAuthor blogAuthor, String password, String salt) {
     }
 }

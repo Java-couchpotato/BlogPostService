@@ -1,24 +1,23 @@
 package com.example.service;
 
 
-import com.example.dto.blogpost_request.PostCreateRequestDTO;
-import com.example.dto.blogpost_request.PostSearchRequestDTO;
-import com.example.dto.blogpost_request.PostUpdateRequestDTO;
-import com.example.dto.blogpost_response.BlogPostCreateResponseDTO;
-import com.example.dto.blogpost_response.BlogPostResponseByIdDTO;
-import com.example.dto.blogpost_response.BlogPostSearchResponseDTO;
-import com.example.entity.PostStatus;
+import com.example.dto.request.PostCreateRequestDTO;
+import com.example.dto.request.PostSearchRequestDTO;
+import com.example.dto.request.PostUpdateRequestDTO;
+import com.example.dto.response.BlogPostCreateResponseDTO;
+import com.example.dto.response.BlogPostResponseByIdDTO;
+import com.example.dto.response.BlogPostSearchResponseDTO;
 
 import java.util.List;
 
 public interface PostService {
 
 
-    List<BlogPostSearchResponseDTO> findPosts();
+    List<BlogPostSearchResponseDTO> findLatestPosts();
 
     BlogPostCreateResponseDTO create(PostCreateRequestDTO postCreateRequestDTO);
 
-    List<BlogPostSearchResponseDTO> search(List<PostSearchRequestDTO> searchRequestDTO);
+    List<BlogPostSearchResponseDTO> searchPosts(PostSearchRequestDTO searchRequestDTO);
 
     BlogPostResponseByIdDTO findPostById(Long id);
 
@@ -30,7 +29,7 @@ public interface PostService {
 
     void setStatusPublished(Long id);
 
-    List<BlogPostSearchResponseDTO> showArticlesByUser(String name);
+    List<BlogPostSearchResponseDTO> showArticlesByUserName(String name);
 
     void deleteById(long postId);
 }

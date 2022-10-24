@@ -1,7 +1,6 @@
 package com.example.repository;
 
 import com.example.entity.BlogPost;
-import org.springframework.data.domain.Example;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -20,5 +19,6 @@ public interface PostRepository extends JpaRepository<BlogPost, Long> {
 
     List<BlogPost> findAllByAuthor(String username);
 
-    Integer countArticleById(Long id);
+    Integer countArticleByAuthor(Long id);
+
 }

@@ -1,9 +1,11 @@
 package com.example.entity;
 
 import lombok.*;
+import org.springframework.data.annotation.LastModifiedDate;
 
 import javax.persistence.*;
 import java.time.Instant;
+import java.time.LocalDateTime;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -13,13 +15,7 @@ import java.time.Instant;
 
 @Entity
 @Table(name = "BlogUser")
-public class BlogUser {
-
-   // @Temporal(TemporalType.DATE)
-    Instant updatedOn;
-
-   // @Temporal(TemporalType.DATE)
-    Instant createdOn;
+public class BlogAuthor {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -39,6 +35,22 @@ public class BlogUser {
     @Enumerated(EnumType.STRING)
     private AccountStatus accountStatus;
 
-    public BlogUser(String authorFirstName, String authorLastName, String authorUsername) {
+    @Convert(converter = RoleConverter.class)
+    @Column(name = "role", nullable = false)
+    private Role role;
+
+    @Column(name = "updated_on")
+    @LastModifiedDate
+    private Instant updatedOn;
+
+    @Column(name = "created_on")
+    @LastModifiedDate
+    private Instant createdOn;
+
+    @Column(name = "is_admin")
+    private boolean isAdmin;
+
+
+    public BlogAuthor(String authorFirstName, String authorLastName, String authorUsername) {
     }
 }

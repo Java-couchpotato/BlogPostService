@@ -1,13 +1,12 @@
 package com.example;
-
-import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.context.SpringBootTest;
-
-@SpringBootTest
-class BlogPostServiceApplicationTests {
-
-    @Test
-    void contextLoads() {
-    }
-
-}
+//
+//import org.junit.jupiter.api.Test;
+//import org.junit.jupiter.api.extension.ExtendWith;
+//import org.mockito.Mock;
+//import org.mockito.junit.jupiter.MockitoExtension;
+//
+//@ExtendWith(MockitoExtension.class)
+//public class BlogPostServiceApplicationTests {
+//    @Mock
+//    private
+//}

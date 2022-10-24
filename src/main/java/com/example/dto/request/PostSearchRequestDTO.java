@@ -1,4 +1,4 @@
-package com.example.dto.blogpost_request;
+package com.example.dto.request;
 
 import lombok.*;
 

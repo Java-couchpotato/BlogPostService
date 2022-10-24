@@ -1,8 +1,10 @@
 package com.example.repository;
 
-import com.example.entity.BlogSession;
+import com.example.entity.BlogAuthorSession;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface BlogSessionRepository extends JpaRepository<BlogSession,Long> {
-    BlogSession findBySessionId(String id);
+public interface BlogSessionRepository extends JpaRepository<BlogAuthorSession,Long> {
+    BlogAuthorSession findBySessionId(String id);
+
+    void delete(BlogAuthorSession blogAuthorSession);
 }

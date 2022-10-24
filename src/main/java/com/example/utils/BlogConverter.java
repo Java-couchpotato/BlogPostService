@@ -1,11 +1,11 @@
 package com.example.utils;
 
-import com.example.dto.blogpost_response.BlogPostCreateResponseDTO;
-import com.example.dto.blogpost_response.BlogPostResponseByIdDTO;
-import com.example.dto.blogpost_response.BlogPostSearchResponseDTO;
-import com.example.dto.user_response.AuthorResponseDTO;
+import com.example.dto.response.BlogPostCreateResponseDTO;
+import com.example.dto.response.BlogPostResponseByIdDTO;
+import com.example.dto.response.BlogPostSearchResponseDTO;
+import com.example.dto.response.AuthorResponseDTO;
 import com.example.entity.BlogPost;
-import com.example.entity.BlogUser;
+import com.example.entity.BlogAuthor;
 
 import java.util.List;
 
@@ -57,18 +57,19 @@ public class BlogConverter {
                 .toList();
     }
 
-    public static AuthorResponseDTO  mapToUserDto(BlogUser blogUser,Integer count) {
+    public static AuthorResponseDTO  mapToUserDto(BlogAuthor blogAuthor, Integer count) {
         return new AuthorResponseDTO(
-                blogUser.getId(),
-                blogUser.getFirstName(),
-                blogUser.getLastName(),
-                blogUser.getUsername(),
+                blogAuthor.getId(),
+                blogAuthor.getFirstName(),
+                blogAuthor.getLastName(),
+                blogAuthor.getUsername(),
                 count
         );
     }
-    public static List<AuthorResponseDTO> mapToUserListDto(List<BlogUser> blogUsers,Integer count) {
-        return blogUsers.stream()
-                .map((BlogUser blogUser) -> mapToUserDto(blogUser,count))
+
+    public static List<AuthorResponseDTO> mapToUserListDto(List<BlogAuthor> blogAuthors, Integer count) {
+        return blogAuthors.stream()
+                .map((BlogAuthor blogAuthor) -> mapToUserDto(blogAuthor,count))
                 .toList();
 
     }

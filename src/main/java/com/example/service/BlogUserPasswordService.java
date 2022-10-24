@@ -1,9 +1,9 @@
 package com.example.service;
 
-import com.example.entity.BlogUser;
+import com.example.entity.BlogAuthor;
 
 public interface BlogUserPasswordService {
-    void generateAndSavePassword(BlogUser blogUser, String password);
+    void generateAndSavePassword(BlogAuthor blogAuthor, String password);
 
-    BlogUser getMatchedAccount(String username, String password);
+    BlogAuthor getMatchedAccount(String username, String password);
 }

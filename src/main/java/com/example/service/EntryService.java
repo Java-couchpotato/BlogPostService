@@ -1,15 +1,19 @@
 package com.example.service;
 
-import com.example.dto.entry_request.LoginRequestDTO;
-import com.example.dto.entry_request.RegistrationRequestDTO;
-import com.example.dto.entry_response.LoginResponseDTO;
+import com.example.dto.request.EntryPasswordUpdateDTO;
+import com.example.dto.request.LoginRequestDTO;
+import com.example.dto.request.RegistrationRequestDTO;
+import com.example.dto.response.LoginResponseDTO;
+import com.example.entity.BlogAuthorSession;
 
 public interface EntryService {
 
-    void creatUser(RegistrationRequestDTO registrationDTORequest);
+    void registerUser(RegistrationRequestDTO registrationDTORequest);
 
     LoginResponseDTO login(LoginRequestDTO loginDTORequest);
 
-    void logout();
+    void logout(BlogAuthorSession blogAuthorSession);
+
+    void updatePassword(EntryPasswordUpdateDTO passwordUpdateDTO);
 
 }

@@ -1,4 +1,4 @@
-package com.example.dto.blogpost_response;
+package com.example.dto.response;
 
 import lombok.*;
 

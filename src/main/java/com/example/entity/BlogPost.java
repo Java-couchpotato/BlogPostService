@@ -1,9 +1,11 @@
 package com.example.entity;
 
 import lombok.*;
+import org.springframework.data.annotation.LastModifiedDate;
 
 import javax.persistence.*;
 import java.time.Instant;
+import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -33,22 +35,21 @@ public class BlogPost {
 
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "blog_user_id")
-    private BlogUser author;
+    private BlogAuthor author;
 
     @Enumerated(EnumType.STRING)
     private PostStatus status;
 
-
     @ElementCollection
     private Set<String> tags = new HashSet<>();
 
-    //@Temporal(TemporalType.DATE)
+    @Column(name = "updated_on")
     private Instant updatedOn;
 
-   // @Temporal(TemporalType.DATE)
+    @Column(name = "created_on")
+    @LastModifiedDate
     private Instant createdOn;
 
 
-    public BlogPost(String title, String body, Set<String> tags, Long authorId) {
-    }
+
 }

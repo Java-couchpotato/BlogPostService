@@ -13,7 +13,7 @@ import javax.persistence.*;
 @Builder
 @Table(name = "blog_author_session")
 @Entity
-public class BlogSession {
+public class BlogAuthorSession {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -21,5 +21,5 @@ public class BlogSession {
     private String sessionId;
     @JoinColumn(name = "blog_author_id",nullable = false)
     @OneToOne
-    private BlogUser blogUser;
+    private BlogAuthor blogAuthor;
 }

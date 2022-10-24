@@ -1,50 +1,92 @@
 package com.example.service.impl;
 
-import com.example.dto.entry_request.LoginRequestDTO;
-import com.example.dto.entry_request.RegistrationRequestDTO;
-import com.example.dto.entry_response.LoginResponseDTO;
-import com.example.entity.BlogUser;
-import com.example.repository.BlogUserPasswordRepository;
-import com.example.repository.BlogUserRepository;
+import com.example.dto.request.EntryPasswordUpdateDTO;
+import com.example.dto.request.LoginRequestDTO;
+import com.example.dto.request.RegistrationRequestDTO;
+import com.example.dto.response.LoginResponseDTO;
+import com.example.entity.BlogAuthor;
+import com.example.entity.BlogAuthorSession;
+import com.example.repository.BlogAuthorRepository;
+import com.example.repository.BlogSessionRepository;
 import com.example.service.BlogUserPasswordService;
 import com.example.service.EntryService;
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
-import javax.transaction.Transactional;
+import java.util.UUID;
 
-@Transactional
 @Slf4j
 @Service
+@AllArgsConstructor
+@NoArgsConstructor
 public class EntryServiceImpl implements EntryService {
-
-    //@Autowired
-    //private BlogUserPasswordRepository passwordRepository;
-    @Autowired
-    private BlogUserRepository blogUserRepository;
 
     private BlogUserPasswordService passwordService;
 
+    private BlogAuthorRepository blogAuthorRepository;
+
+    private BlogSessionRepository sessionRepository;
+
+
     @Override
-    public void creatUser(RegistrationRequestDTO registrationRequestDTO) {
-        BlogUser blogUser = new BlogUser(
+    public void registerUser(RegistrationRequestDTO registrationRequestDTO) {
+        if (blogAuthorRepository.existsByUsername(registrationRequestDTO.authorUsername)) {
+            throw new ResponseStatusException(HttpStatus.CONFLICT);
+        }
+
+        BlogAuthor blogAuthor = new BlogAuthor(
                 registrationRequestDTO.authorFirstName,
                 registrationRequestDTO.authorLastName,
                 registrationRequestDTO.authorUsername
         );
 
-        blogUserRepository.save(blogUser);
-        passwordService.generateAndSavePassword(blogUser, registrationRequestDTO.getPassword());
+
+        passwordService.generateAndSavePassword(blogAuthor, registrationRequestDTO.getPassword());
+        blogAuthorRepository.save(blogAuthor);
     }
 
     @Override
-    public LoginResponseDTO login(LoginRequestDTO loginDTORequest) {
-        return null;
+    public LoginResponseDTO login(LoginRequestDTO loginRequestDTO) {
+
+        BlogAuthor blogAuthor = passwordService.getMatchedAccount(loginRequestDTO.getAuthorUsername(), loginRequestDTO.getPassword());
+
+        if (blogAuthor == null) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
+        }
+        BlogAuthorSession blogAuthorSession = BlogAuthorSession.builder()
+                .id(blogAuthor.getId())
+                .sessionId(UUID.randomUUID().toString())
+                .build();
+        sessionRepository.save(blogAuthorSession);
+
+        return LoginResponseDTO.builder()
+                .sessionId(blogAuthorSession.getSessionId())
+                .build();
     }
 
     @Override
-    public void logout() {
+    public void logout(BlogAuthorSession blogAuthorSession) {
+        BlogAuthorSession blogAuthorSessionDb = sessionRepository.findBySessionId(blogAuthorSession.getSessionId());
+        if (blogAuthorSessionDb != null) {
+            sessionRepository.save(blogAuthorSessionDb);
+        } else {
+            sessionRepository.delete(blogAuthorSession);
+        }
+    }
+
+    @Override
+    public void updatePassword(EntryPasswordUpdateDTO passwordUpdateDTO) {
+
+        BlogAuthor blogAuthor = passwordService.getMatchedAccount(passwordUpdateDTO.getUsername(), passwordUpdateDTO.getOldPassword());
+
+        if (blogAuthor == null) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
+        }
+        passwordService.generateAndSavePassword(blogAuthor, passwordUpdateDTO.getNewPassword());
 
     }
 }

@@ -1,12 +1,12 @@
 package com.example.service;
 
-import com.example.dto.user_response.AuthorResponseDTO;
-import com.example.dto.user_response.AuthorWithArticlesResponseDTO;
+import com.example.dto.response.AuthorResponseDTO;
+import com.example.dto.response.AuthorWithArticlesResponseDTO;
 
 
 import java.util.List;
 
-public interface BlogUserService {
+public interface BlogAuthorService {
 
     public List<AuthorResponseDTO> showAuthorsByArticlesCount();
 
