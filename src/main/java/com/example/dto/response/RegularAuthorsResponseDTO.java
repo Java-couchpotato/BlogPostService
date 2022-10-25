@@ -1,5 +1,5 @@
 package com.example.dto.response;
-import com.example.entity.Role;
+import com.example.entity.RoleName;
 import lombok.*;
 
 import java.util.List;
@@ -15,5 +15,5 @@ public class RegularAuthorsResponseDTO {
     public String username;
     public boolean isAdmin;
     public boolean isRoAdmin;
-    public List<Role> roles;
+    public List<RoleName> roleNames;
 }

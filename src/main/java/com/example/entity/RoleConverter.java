@@ -4,14 +4,14 @@ import javax.persistence.AttributeConverter;
 import javax.persistence.Converter;
 
 @Converter(autoApply = true)
-public class RoleConverter implements AttributeConverter<Role, Integer> {
+public class RoleConverter implements AttributeConverter<RoleName, Integer> {
     @Override
-    public Integer convertToDatabaseColumn(Role role) {
-        return role == null ? null : role.getRoleId();
+    public Integer convertToDatabaseColumn(RoleName roleName) {
+        return roleName == null ? null : roleName.getRoleId();
     }
 
     @Override
-    public Role convertToEntityAttribute(Integer integer) {
-        return integer == null ? null : Role.findBy(integer);
+    public RoleName convertToEntityAttribute(Integer integer) {
+        return integer == null ? null : RoleName.findBy(integer);
     }
 }

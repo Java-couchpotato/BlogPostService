@@ -18,13 +18,13 @@ import java.util.Set;
 @ToString
 
 @Entity
-@Table(name = "BlogPost ")
+@Table(name = "blog_post ")
 public class BlogPost {
 
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "blog_post")
+    @Column(name = "blog_post_id")
     private Long id;
 
     @Column(name = "title")
@@ -34,10 +34,11 @@ public class BlogPost {
     private String body;
 
     @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "blog_user_id")
+    @JoinColumn(name = "blog_author_id")
     private BlogAuthor author;
 
     @Enumerated(EnumType.STRING)
+    @Column(name = "post_status")
     private PostStatus status;
 
     @ElementCollection

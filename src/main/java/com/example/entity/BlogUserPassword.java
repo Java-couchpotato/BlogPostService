@@ -11,7 +11,7 @@ import javax.persistence.*;
 @Builder
 
 @Entity
-@Table(name = "BlogUserPassword ")
+@Table(name = "blog_author_password ")
 public class BlogUserPassword {
 
     @Id
@@ -26,7 +26,7 @@ public class BlogUserPassword {
     private String salt;
 
     @OneToOne
-    @JoinColumn(name = "user_blog_user_id")
+    @JoinColumn(name = "blog_author_id")
     private BlogAuthor user;
 
     public BlogUserPassword(BlogAuthor blogAuthor, String password, String salt) {

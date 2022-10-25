@@ -1,5 +1,5 @@
 package com.example.dto.response;
-import com.example.entity.Role;
+import com.example.entity.RoleName;
 import lombok.*;
 
 
@@ -10,5 +10,5 @@ import lombok.*;
 @Builder
 public class UserRoleResponseDTO {
 
-    public Role roleName;
+    public RoleName roleName;
 }

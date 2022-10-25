@@ -36,6 +36,7 @@ public class PostServiceImpl implements PostService {
 
     @Override
     public List<BlogPostSearchResponseDTO> findLatestPosts() {
+       // postRepository.findBlogPostsByStatusAndOrderByCreatedOnDesc();
         return postRepository.findAll().stream()
                 .sorted(Comparator.comparing(BlogPost::getCreatedOn).reversed())
                 .filter(status -> status.getStatus().equals(PostStatus.PUBLISHED))

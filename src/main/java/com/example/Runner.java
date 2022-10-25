@@ -1,7 +1,7 @@
 package com.example;
 
 import com.example.entity.BlogAuthor;
-import com.example.entity.Role;
+import com.example.entity.RoleName;
 import com.example.repository.BlogAuthorRepository;
 import com.example.service.BlogUserPasswordService;
 import lombok.AllArgsConstructor;
@@ -30,7 +30,7 @@ public class Runner implements CommandLineRunner {
                 .firstName("Ivan")
                 .lastName("Ivanov")
                 .username("ivashka")
-                .role(Role.ADMIN)
+                .roleName(RoleName.ADMIN)
                 .build();
 
         userRepository.save(user);

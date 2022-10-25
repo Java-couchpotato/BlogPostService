@@ -1,9 +1,11 @@
 package com.example.configurations;
 
 import com.example.entity.BlogAuthorSession;
-import com.example.entity.Role;
+import com.example.entity.RoleName;
 import com.example.repository.BlogSessionRepository;
 import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -19,11 +21,15 @@ import java.io.IOException;
 import java.util.List;
 
 @Component
-@AllArgsConstructor
+@NoArgsConstructor
 public class SecurityFilter extends OncePerRequestFilter {
 
-
     private BlogSessionRepository sessionRepository;
+
+    @Autowired
+    public SecurityFilter(BlogSessionRepository sessionRepository) {
+        this.sessionRepository = sessionRepository;
+    }
 
     @Override
     protected void doFilterInternal(
@@ -45,10 +51,10 @@ public class SecurityFilter extends OncePerRequestFilter {
             return;
         }
 
-        var role = blogSesion.getBlogAuthor().getRole();
-        var roles = role == Role.ADMIN ?
-                List.of(Role.USER, Role.ADMIN) :
-                List.of(Role.USER);
+        var role = blogSesion.getBlogAuthor().getRoleName();
+        var roles = role == RoleName.ADMIN ?
+                List.of(RoleName.USER, RoleName.ADMIN) :
+                List.of(RoleName.USER);
 
         Authentication key = new UsernamePasswordAuthenticationToken(
                 blogSesion,

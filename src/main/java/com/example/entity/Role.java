@@ -1,35 +1,30 @@
 package com.example.entity;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import org.springframework.security.core.GrantedAuthority;
+import lombok.Data;
 
-import javax.persistence.Entity;
-import java.util.Arrays;
-import java.util.Objects;
+import javax.persistence.*;
+import java.util.List;
 
-@AllArgsConstructor
-@Getter
-public enum Role implements GrantedAuthority {
+@Entity
+@Table(name = "roles")
+@Data
+public class Role {
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "role_id", nullable = false)
+    private Long id;
 
-    USER(1),
-    ADMIN(2)
-    ;
+    @Column(name = "role_name")
+    private RoleName roleName;
 
-    private final Integer roleId;
+    @ManyToMany(mappedBy = "roles", fetch = FetchType.LAZY)
+    private List<BlogAuthor> authors;
 
-    public static Role findBy(Integer id){
-        if (id==null){
-            return  null;
-        }
-        return Arrays.stream(Role.values())
-                .filter(x-> Objects.equals(x.getRoleId(),id))
-                .findFirst()
-                .orElse(null);
+    public Long getId() {
+        return id;
     }
 
-    @Override
-    public String getAuthority() {
-        return name();
+    public void setId(Long id) {
+        this.id = id;
     }
 }

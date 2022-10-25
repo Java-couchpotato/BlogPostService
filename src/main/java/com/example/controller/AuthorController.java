@@ -25,7 +25,7 @@ public class AuthorController {
        return userService.showAuthorsByArticlesCount();
     }
 
-    @PreAuthorize("hasAuthority('USER')||#id==authentication.principal.blogUser.id")
+    //@PreAuthorize("hasAuthority('USER')||#id==authentication.principal.blogUser.id")
     @GetMapping("/{id}")
     public List<AuthorWithArticlesResponseDTO> showAuthorsWithArticles(){
        return userService.showAuthorsWithArticles();

@@ -30,7 +30,7 @@ public class EntryController {
     private BlogSessionRepository sessionRepository;
     private BlogUserPasswordService passwordService;
 
-
+    @PreAuthorize("hasAuthority('USER')")
     @PostMapping("/registration")
     public void register(RegistrationRequestDTO registrationRequestDTO) {
         entryService.registerUser(registrationRequestDTO);

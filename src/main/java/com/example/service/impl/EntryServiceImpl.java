@@ -13,6 +13,7 @@ import com.example.service.EntryService;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
@@ -26,9 +27,9 @@ import java.util.UUID;
 public class EntryServiceImpl implements EntryService {
 
     private BlogUserPasswordService passwordService;
-
+    @Autowired
     private BlogAuthorRepository blogAuthorRepository;
-
+    @Autowired
     private BlogSessionRepository sessionRepository;
 
 
@@ -74,7 +75,7 @@ public class EntryServiceImpl implements EntryService {
         if (blogAuthorSessionDb != null) {
             sessionRepository.save(blogAuthorSessionDb);
         } else {
-            sessionRepository.delete(blogAuthorSession);
+            sessionRepository.deleteBySessionId(blogAuthorSession);
         }
     }
 

@@ -5,7 +5,7 @@ import org.springframework.data.annotation.LastModifiedDate;
 
 import javax.persistence.*;
 import java.time.Instant;
-import java.time.LocalDateTime;
+import java.util.List;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -14,12 +14,12 @@ import java.time.LocalDateTime;
 @Builder
 
 @Entity
-@Table(name = "BlogUser")
+@Table(name = "blog_author")
 public class BlogAuthor {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "blog_user_id")
+    @Column(name = "blog_author_id")
     private Long id;
 
     @Column(name = "username")
@@ -36,8 +36,8 @@ public class BlogAuthor {
     private AccountStatus accountStatus;
 
     @Convert(converter = RoleConverter.class)
-    @Column(name = "role", nullable = false)
-    private Role role;
+    @Column(name = "rolename", nullable = false)
+    private RoleName roleName;
 
     @Column(name = "updated_on")
     @LastModifiedDate
@@ -50,6 +50,13 @@ public class BlogAuthor {
     @Column(name = "is_admin")
     private boolean isAdmin;
 
+    @ManyToMany(fetch =FetchType.EAGER,cascade = CascadeType.ALL)
+    @JoinTable(name = "roles",
+    joinColumns = {
+            @JoinColumn(name = "blog_author_id")},
+    inverseJoinColumns = {
+            @JoinColumn(name = "role_id")})
+    private List<Role>roles;
 
     public BlogAuthor(String authorFirstName, String authorLastName, String authorUsername) {
     }
