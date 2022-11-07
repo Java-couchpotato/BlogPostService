@@ -1,9 +1,8 @@
 package com.example.configurations;
 
 import com.example.entity.BlogAuthorSession;
-import com.example.entity.RoleName;
+import com.example.entity.role.Role;
 import com.example.repository.BlogSessionRepository;
-import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -37,27 +36,27 @@ public class SecurityFilter extends OncePerRequestFilter {
             HttpServletResponse response,
             FilterChain filterChain) throws ServletException, IOException {
 
-        String header = request.getHeader("Authorisation");
+        String header = request.getHeader("Authorization");
 
         if (header == null) {
             filterChain.doFilter(request, response);
             return;
         }
 
-        BlogAuthorSession blogSesion = sessionRepository.findBySessionId(header);
+        BlogAuthorSession blogSession = sessionRepository.findBySessionId(header);
 
-        if (blogSesion == null) {
+        if (blogSession == null) {
             filterChain.doFilter(request, response);
             return;
         }
 
-        var role = blogSesion.getBlogAuthor().getRoleName();
-        var roles = role == RoleName.ADMIN ?
-                List.of(RoleName.USER, RoleName.ADMIN) :
-                List.of(RoleName.USER);
+        var role = blogSession.getBlogAuthor().getRole();
+        var roles = role.equals(String.valueOf(Role.ADMIN)) ?
+                List.of(Role.USER, Role.ADMIN) :
+                List.of(Role.USER);
 
         Authentication key = new UsernamePasswordAuthenticationToken(
-                blogSesion,
+                blogSession,
                 null,
                 roles.stream().map(x -> new SimpleGrantedAuthority(x.name())).toList()
         );

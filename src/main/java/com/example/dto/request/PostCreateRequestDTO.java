@@ -4,15 +4,10 @@ import lombok.*;
 
 import java.util.Set;
 
-@AllArgsConstructor
-@NoArgsConstructor
-@Getter
-@Setter
 @Builder
-public class PostCreateRequestDTO {
+public record PostCreateRequestDTO ( String title,
+                                     String body,
+                                     Long authorId){
 
-    public String title;
-    public String body;
-    public Set<String> tags;
-    public Long authorId;
+
 }

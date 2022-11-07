@@ -5,7 +5,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;
 
-public interface BlogAuthorRepository extends JpaRepository<BlogAuthor,Long> {
+public interface AuthorRepository extends JpaRepository<BlogAuthor,Long> {
 
     @Override
     Optional<BlogAuthor> findById(Long id);
@@ -13,4 +13,6 @@ public interface BlogAuthorRepository extends JpaRepository<BlogAuthor,Long> {
     BlogAuthor findByUsername(String username);
 
     boolean existsByUsername(String authorUsername);
+
+    boolean findAllByRole(boolean equals);
 }

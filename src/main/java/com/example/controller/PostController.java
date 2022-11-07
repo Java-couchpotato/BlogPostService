@@ -6,7 +6,7 @@ import com.example.dto.request.PostUpdateRequestDTO;
 import com.example.dto.response.BlogPostCreateResponseDTO;
 import com.example.dto.response.BlogPostResponseByIdDTO;
 import com.example.dto.response.BlogPostSearchResponseDTO;
-import com.example.entity.PostStatus;
+import com.example.entity.types.PostStatus;
 import com.example.service.PostService;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;

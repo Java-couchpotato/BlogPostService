@@ -7,6 +7,7 @@ import com.example.dto.response.UserRoleResponseDTO;
 import com.example.service.AdminService;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
@@ -17,10 +18,11 @@ import java.util.List;
 @RequestMapping("/admin")
 public class AdminController {
 
-    @Autowired
-    private AdminService adminService;
-    @Autowired
-    private EntryController entryService;
+
+    private final AdminService adminService;
+
+    private final EntryController entryService;
+
 
     @PutMapping("users/{userId}/promote")
     public void promote(@PathVariable Long userId) {
@@ -32,6 +34,7 @@ public class AdminController {
         adminService.demoteToUser();
     }
 
+    @PreAuthorize("hasRole('ADMIN')|| hasAuthority('admin.posts.rw')")
     @PatchMapping("users/{userId}")
     public void updateUsersData(AdminRequestDto adminRequestDto, @PathVariable String userId) {
         adminService.udateUsersNameOrLastname();

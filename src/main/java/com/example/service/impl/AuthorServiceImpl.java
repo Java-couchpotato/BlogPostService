@@ -4,8 +4,7 @@ import com.example.dto.response.AuthorResponseDTO;
 import com.example.dto.response.AuthorWithArticlesResponseDTO;
 import com.example.entity.BlogAuthor;
 import com.example.entity.BlogPost;
-import com.example.entity.PostStatus;
-import com.example.repository.BlogAuthorRepository;
+import com.example.entity.types.PostStatus;
 import com.example.repository.PostRepository;
 import com.example.service.BlogAuthorService;
 import com.example.utils.BlogConverter;
@@ -25,8 +24,8 @@ import java.util.stream.Collectors;
 @Transactional
 public class AuthorServiceImpl implements BlogAuthorService {
 
-    @Autowired
-    BlogAuthorRepository blogAuthorRepository;
+    //@Autowired
+    //AuthorRepository authorRepository;
 
     @Autowired
     PostRepository postRepository;

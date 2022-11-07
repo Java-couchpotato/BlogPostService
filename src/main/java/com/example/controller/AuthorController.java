@@ -5,7 +5,6 @@ import com.example.dto.response.AuthorWithArticlesResponseDTO;
 import com.example.service.BlogAuthorService;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -18,16 +17,16 @@ import java.util.List;
 public class AuthorController {
 
     @Autowired
-    private BlogAuthorService userService;
+    private BlogAuthorService authorService;
 
-    @GetMapping
+    @GetMapping("/show_authors")
     public List<AuthorResponseDTO>showAuthors(){
-       return userService.showAuthorsByArticlesCount();
+       return authorService.showAuthorsByArticlesCount();
     }
 
     //@PreAuthorize("hasAuthority('USER')||#id==authentication.principal.blogUser.id")
     @GetMapping("/{id}")
     public List<AuthorWithArticlesResponseDTO> showAuthorsWithArticles(){
-       return userService.showAuthorsWithArticles();
+       return authorService.showAuthorsWithArticles();
     }
 }

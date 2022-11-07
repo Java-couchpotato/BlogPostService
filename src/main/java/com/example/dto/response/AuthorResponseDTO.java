@@ -2,16 +2,11 @@ package com.example.dto.response;
 
 import lombok.*;
 
-@AllArgsConstructor
-@NoArgsConstructor
-@Getter
-@Setter
 @Builder
-public class AuthorResponseDTO {
+public record AuthorResponseDTO (Long authorId,
+                                 String authorFirstName,
+                                 String authorLastName,
+                                 String authorUsername,
+                                 int blogsCount){
 
-    public Long authorId;
-    public String authorFirstName;
-    public String authorLastName;
-    public String authorUsername;
-    public int blogsCount;
 }

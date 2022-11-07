@@ -2,14 +2,10 @@ package com.example.dto.request;
 
 import lombok.*;
 
-@AllArgsConstructor
-@NoArgsConstructor
-@Getter
-@Setter
 @Builder
-public class EntryPasswordUpdateDTO {
+public record EntryPasswordUpdateDTO( String username,
+                                      String oldPassword,
+                                      String newPassword) {
 
-    public String username;
-    public String oldPassword;
-    public String newPassword;
+
 }

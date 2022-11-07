@@ -6,8 +6,12 @@ import com.example.dto.request.PostUpdateRequestDTO;
 import com.example.dto.response.BlogPostCreateResponseDTO;
 import com.example.dto.response.BlogPostResponseByIdDTO;
 import com.example.dto.response.BlogPostSearchResponseDTO;
-import com.example.entity.*;
-import com.example.repository.BlogAuthorRepository;
+import com.example.entity.BlogAuthor;
+import com.example.entity.BlogPost;
+import com.example.entity.role.Role;
+import com.example.entity.types.AccountStatus;
+import com.example.entity.types.PostStatus;
+import com.example.repository.AuthorRepository;
 import com.example.repository.PostRepository;
 import com.example.service.PostService;
 import com.example.utils.BlogConverter;
@@ -17,6 +21,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+import javax.persistence.EntityManager;
 import javax.transaction.Transactional;
 import java.time.Instant;
 import java.time.LocalDateTime;
@@ -26,40 +31,52 @@ import java.util.List;
 @Transactional
 @Slf4j
 @Service
+
 public class PostServiceImpl implements PostService {
 
-    @Autowired
-    private PostRepository postRepository;
-    @Autowired
-    private BlogAuthorRepository blogAuthorRepository;
+    private final PostRepository postRepository;
+    private final AuthorRepository authorRepository;
+
+    public PostServiceImpl(PostRepository postRepository, AuthorRepository authorRepository) {
+        this.postRepository = postRepository;
+        this.authorRepository = authorRepository;
+    }
 
 
     @Override
     public List<BlogPostSearchResponseDTO> findLatestPosts() {
-       // postRepository.findBlogPostsByStatusAndOrderByCreatedOnDesc();
-        return postRepository.findAll().stream()
-                .sorted(Comparator.comparing(BlogPost::getCreatedOn).reversed())
-                .filter(status -> status.getStatus().equals(PostStatus.PUBLISHED))
-                .limit(30)
-                .map(BlogConverter::mapToDto)
-                .toList();
+
+        var permission = authorRepository.findAllByRole(Role.ADMIN.getPermissions().toString().equals("admin.posts.ro"));
+
+        if (permission) {
+            return postRepository.findAll().stream()
+                    .sorted(Comparator.comparing(BlogPost::getCreatedOn).reversed())
+                    .map(BlogConverter::mapToDto)
+                    .toList();
+        } else {
+            return postRepository.findAllByStatus(PostStatus.PUBLISHED).stream()
+                    .sorted(Comparator.comparing(BlogPost::getCreatedOn).reversed())
+                    .map(BlogConverter::mapToDto)
+                    .toList();
+        }
     }
 
     @Override
     public BlogPostCreateResponseDTO create(PostCreateRequestDTO postCreateRequestDTO) {
 
-        BlogAuthor author = blogAuthorRepository.findById(postCreateRequestDTO.getAuthorId())
-                .orElseThrow();
+        BlogAuthor author = authorRepository.findById(postCreateRequestDTO.authorId())
+                .orElseThrow(()->new ResponseStatusException(HttpStatus.UPGRADE_REQUIRED,
+                   String.format("Blog with ID %d is in status [INACTIVE]", postCreateRequestDTO.authorId())));
 
-        if (author.getAccountStatus() == AccountStatus.INACTIVE) {
-            throw new ResponseStatusException(HttpStatus.UPGRADE_REQUIRED,
-                    String.format("Blog with ID %d is in status [INACTIVE]", author.getId()));
-        }
+//        if (author.getAccountStatus() == AccountStatus.INACTIVE) {
+//            throw new ResponseStatusException(HttpStatus.UPGRADE_REQUIRED,
+//                    String.format("Blog with ID %d is in status [INACTIVE]", author.getId()));
+//        }
 
         BlogPost blogPost = BlogPost.builder()
-                .title(postCreateRequestDTO.title)
-                .body(postCreateRequestDTO.body)
-                .tags(postCreateRequestDTO.tags)
+                .title(postCreateRequestDTO.title())
+                .body(postCreateRequestDTO.body())
+                //.tags(postCreateRequestDTO.tags)
                 .status(PostStatus.PUBLISHED)
                 .author(author)
                 .createdOn(Instant.from(LocalDateTime.now()))
@@ -67,19 +84,23 @@ public class PostServiceImpl implements PostService {
 
         return BlogConverter.mapToDtoCreate((postRepository.save(blogPost)));
     }
+    // @PersistenceContext // == @Autowired for EntityManager
+    @Autowired
+    private EntityManager entityManager;
 
     @Override
     public List<BlogPostSearchResponseDTO> searchPosts(PostSearchRequestDTO searchRequestDTO) {
-//        Map<Role,List<BlogPost>> posts = postRepository.findAll().stream().collect(Collectors.groupingBy(p->p.getAuthor().getRole()));
-//        var user =  SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-//        if (user.equals(Role.ADMIN)){
-//            return (List<BlogPostSearchResponseDTO>) posts.entrySet().stream().map(a->BlogConverter.mapToDtoListSearch(a.getValue()));
-//        }
 
-
-
-        return BlogConverter.mapToDtoListSearch(postRepository.findAll().stream()
-                .filter(status -> status.getStatus().equals(PostStatus.PUBLISHED)).toList());
+        var permission = authorRepository.findAllByRole(Role.ADMIN.getPermissions().toString().equals("admin.posts.ro"));
+        if (permission) {
+            return postRepository.findAll().stream()
+                    .map(BlogConverter::mapToDto)
+                    .toList();
+        } else {
+            return postRepository.findAllByStatus(PostStatus.PUBLISHED).stream()
+                    .map(BlogConverter::mapToDto)
+                    .toList();
+        }
     }
 
     @Override
@@ -94,9 +115,9 @@ public class PostServiceImpl implements PostService {
 
         BlogPost blogPost = postRepository.findById(postId).orElseThrow();
 
-        blogPost.setTitle(updateRequestDTO.title);
-        blogPost.setBody(updateRequestDTO.body);
-        blogPost.setTags(updateRequestDTO.tags);
+        blogPost.setTitle(updateRequestDTO.title());
+        blogPost.setBody(updateRequestDTO.body());
+        //blogPost.setTags(updateRequestDTO.tags);
 
         postRepository.save(blogPost);
     }
@@ -137,7 +158,7 @@ public class PostServiceImpl implements PostService {
     @Override
     public List<BlogPostSearchResponseDTO> showArticlesByUserName(String name) {
 
-        return postRepository.findAllByAuthor(name)
+        return postRepository.findAllByAuthor_Username(name)
                 .stream()
                 .map(BlogConverter::mapToDtoSearch)
                 .toList();

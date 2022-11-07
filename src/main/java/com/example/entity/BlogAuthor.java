@@ -1,26 +1,29 @@
 package com.example.entity;
 
+import com.example.entity.converter.AccountStatusConverter;
+import com.example.entity.converter.RoleConverter;
+import com.example.entity.role.Permission;
+import com.example.entity.role.Role;
+import com.example.entity.types.AccountStatus;
 import lombok.*;
+import lombok.experimental.SuperBuilder;
 import org.springframework.data.annotation.LastModifiedDate;
 
 import javax.persistence.*;
 import java.time.Instant;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
 @Setter
-@Builder
+@SuperBuilder
 
 @Entity
 @Table(name = "blog_author")
-public class BlogAuthor {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "blog_author_id")
-    private Long id;
+public class BlogAuthor extends AbstractEntity{
 
     @Column(name = "username")
     private String username;
@@ -33,11 +36,20 @@ public class BlogAuthor {
 
     @Column(name = "account_status")
     @Enumerated(EnumType.STRING)
+    @Convert(converter = AccountStatusConverter.class)
     private AccountStatus accountStatus;
 
-    @Convert(converter = RoleConverter.class)
-    @Column(name = "rolename", nullable = false)
-    private RoleName roleName;
+    @Enumerated(EnumType.STRING)
+    @Column(name = "role")
+    private Role role;
+
+    @ManyToOne
+    @JoinColumn(name = "updated_by_blog_author_id")
+    private BlogAuthor updatedBy;
+
+    @ManyToOne
+    @JoinColumn(name = "created_by_blog_author_id")
+    private BlogAuthor createdBy;
 
     @Column(name = "updated_on")
     @LastModifiedDate
@@ -50,14 +62,5 @@ public class BlogAuthor {
     @Column(name = "is_admin")
     private boolean isAdmin;
 
-    @ManyToMany(fetch =FetchType.EAGER,cascade = CascadeType.ALL)
-    @JoinTable(name = "roles",
-    joinColumns = {
-            @JoinColumn(name = "blog_author_id")},
-    inverseJoinColumns = {
-            @JoinColumn(name = "role_id")})
-    private List<Role>roles;
 
-    public BlogAuthor(String authorFirstName, String authorLastName, String authorUsername) {
-    }
 }

@@ -1,13 +1,8 @@
 package com.example.dto.response;
 
-import lombok.*;
+import lombok.Builder;
 
-@NoArgsConstructor
-@AllArgsConstructor
-@Getter
-@Setter
 @Builder
-public class LoginResponseDTO {
-    public String sessionId;
+public record LoginResponseDTO(String sessionId) {
 }
 

@@ -1,14 +1,12 @@
 package com.example.dto.request;
 
-import lombok.*;
+import lombok.Builder;
 
-@NoArgsConstructor
-@AllArgsConstructor
-@Getter
-@Setter
 @Builder
-public class LoginRequestDTO {
+public record LoginRequestDTO(
+        String username,
+        String password
+) {
 
-    public String password;
-    public String authorUsername;
 }
+

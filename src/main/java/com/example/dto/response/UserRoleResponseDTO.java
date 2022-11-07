@@ -1,14 +1,8 @@
 package com.example.dto.response;
-import com.example.entity.RoleName;
+import com.example.entity.role.Role;
 import lombok.*;
 
-
-@AllArgsConstructor
-@NoArgsConstructor
-@Getter
-@Setter
 @Builder
-public class UserRoleResponseDTO {
+public record UserRoleResponseDTO(Role role) {
 
-    public RoleName roleName;
 }

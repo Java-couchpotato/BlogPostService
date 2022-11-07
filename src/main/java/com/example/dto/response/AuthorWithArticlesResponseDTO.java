@@ -4,17 +4,11 @@ import lombok.*;
 
 import java.util.List;
 
-@AllArgsConstructor
-@NoArgsConstructor
-@Getter
-@Setter
 @Builder
-public class AuthorWithArticlesResponseDTO {
-
-    public Long authorId;
-    public String authorFirstName;
-    public String authorLastName;
-    public String authorUsername;
-    public List<BlogPostSearchResponseDTO> blogs;
+public record AuthorWithArticlesResponseDTO(Long authorId,
+                                            String authorFirstName,
+                                            String authorLastName,
+                                            String authorUsername,
+                                            List<BlogPostSearchResponseDTO> blogs) {
 
 }

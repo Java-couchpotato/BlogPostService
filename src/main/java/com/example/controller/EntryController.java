@@ -13,31 +13,24 @@ import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @AllArgsConstructor
-@NoArgsConstructor
 @RequestMapping("/entry")
 public class EntryController {
 
-    @Autowired
     private EntryService entryService;
-    @Autowired
     private BlogSessionRepository sessionRepository;
     private BlogUserPasswordService passwordService;
 
-    @PreAuthorize("hasAuthority('USER')")
     @PostMapping("/registration")
-    public void register(RegistrationRequestDTO registrationRequestDTO) {
+    public void register(@RequestBody RegistrationRequestDTO registrationRequestDTO) {
         entryService.registerUser(registrationRequestDTO);
     }
 
     @PostMapping("/login")
-    public LoginResponseDTO login(LoginRequestDTO loginRequestDTO) {
+    public LoginResponseDTO login(@RequestBody LoginRequestDTO loginRequestDTO) {
         return entryService.login(loginRequestDTO);
     }
 
@@ -46,10 +39,9 @@ public class EntryController {
         entryService.logout(blogAuthorSession);
 
     }
-
     @PreAuthorize("hasAuthority('USER')||#id==authentication.principal.blogUser.id")
     @PutMapping("/update-password")
-    public void setNewPassword(@AuthenticationPrincipal EntryPasswordUpdateDTO passwordUpdateDTO) {
+    public void setNewPassword(@RequestBody EntryPasswordUpdateDTO passwordUpdateDTO) {
         entryService.updatePassword(passwordUpdateDTO);
 
     }

@@ -1,6 +1,7 @@
 package com.example.entity;
 
 import lombok.*;
+import lombok.experimental.SuperBuilder;
 
 import javax.persistence.*;
 
@@ -8,16 +9,11 @@ import javax.persistence.*;
 @NoArgsConstructor
 @Getter
 @Setter
-@Builder
+@SuperBuilder
 
 @Entity
 @Table(name = "blog_author_password ")
-public class BlogUserPassword {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "blog_password_id")
-    private Long id;
+public class BlogAuthorPassword extends AbstractEntity{
 
     @Column(name = "password")
     private String password;
@@ -29,6 +25,4 @@ public class BlogUserPassword {
     @JoinColumn(name = "blog_author_id")
     private BlogAuthor user;
 
-    public BlogUserPassword(BlogAuthor blogAuthor, String password, String salt) {
-    }
 }
