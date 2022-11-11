@@ -1,15 +1,9 @@
 package com.example.entity.role;
 
-import com.example.entity.role.Permission;
-import lombok.Getter;
-import lombok.Setter;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
-import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
-
-@Getter
 
 public enum Role {
 
@@ -24,7 +18,7 @@ public enum Role {
             Permission.ADMIN_MODIFY_ROLES)
     );
 
-    private final Set<Permission> permissions;
+    private Set<Permission> permissions;
 
 
     Role(Set<Permission> permissions) {
@@ -34,6 +28,7 @@ public enum Role {
     public Set<Permission> getPermissions() {
         return permissions;
     }
+
 
     public Set<SimpleGrantedAuthority> getAuthorities() {
         return getPermissions().stream()

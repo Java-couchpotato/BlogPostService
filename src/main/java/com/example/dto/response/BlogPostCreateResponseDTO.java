@@ -1,12 +1,17 @@
 package com.example.dto.response;
 
+import com.example.entity.Tag;
 import com.example.entity.types.PostStatus;
+import lombok.Builder;
 
+import java.util.List;
 
-public record BlogPostCreateResponseDTO(Long blogId,
-                                        String blogTitle,
-                                        String blogBody,
-                                        PostStatus blogStatus,
+@Builder
+public record BlogPostCreateResponseDTO(Long id,
+                                        String title,
+                                        String body,
+                                        List<Tag> tag,
+                                        PostStatus status,
                                         Long authorId) {
 
 

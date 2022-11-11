@@ -12,10 +12,10 @@ import java.util.List;
 public class BlogConverter {
 
     public static BlogPostSearchResponseDTO mapToDto(BlogPost blogPost) {
-        return new BlogPostSearchResponseDTO(
-                blogPost.getId(),
-                blogPost.getTitle()
-        );
+        return  BlogPostSearchResponseDTO.builder()
+                .blogId(blogPost.getId())
+                .blogTitle(blogPost.getTitle())
+                .build();
     }
 
     public static BlogPostResponseByIdDTO mapToDtoById(BlogPost blogPost) {
@@ -31,20 +31,21 @@ public class BlogConverter {
     }
 
     public static BlogPostCreateResponseDTO mapToDtoCreate(BlogPost blogPost) {
-        return new BlogPostCreateResponseDTO(
-                blogPost.getId(),
-                blogPost.getTitle(),
-                blogPost.getBody(),
-                blogPost.getStatus(),
-                blogPost.getAuthor().getId()
-        );
+        return BlogPostCreateResponseDTO.builder()
+                .id(blogPost.getId())
+                .title(blogPost.getTitle())
+                .body(blogPost.getBody())
+                .tag(blogPost.getTags())
+                .status(blogPost.getStatus())
+                .authorId(blogPost.getId())
+                .build();
     }
 
     public static BlogPostSearchResponseDTO mapToDtoSearch(BlogPost blogPost) {
-        return new BlogPostSearchResponseDTO(
-                blogPost.getId(),
-                blogPost.getTitle()
-        );
+        return BlogPostSearchResponseDTO.builder()
+                .blogId(blogPost.getId())
+                .blogTitle(blogPost.getTitle())
+                .build();
     }
 
 
@@ -56,13 +57,13 @@ public class BlogConverter {
     }
 
     public static AuthorResponseDTO mapToUserDto(BlogAuthor blogAuthor, Integer count) {
-        return new AuthorResponseDTO(
-                blogAuthor.getId(),
-                blogAuthor.getFirstName(),
-                blogAuthor.getLastName(),
-                blogAuthor.getUsername(),
-                count
-        );
+        return  AuthorResponseDTO.builder()
+                .authorId(blogAuthor.getId())
+                .authorFirstName(blogAuthor.getFirstName())
+                .authorLastName(blogAuthor.getLastName())
+                .authorUsername(blogAuthor.getUsername())
+                .blogsCount(count)
+                .build();
     }
 
     public static List<AuthorResponseDTO> mapToUserListDto(List<BlogAuthor> blogAuthors, Integer count) {

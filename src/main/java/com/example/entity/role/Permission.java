@@ -1,5 +1,8 @@
 package com.example.entity.role;
 
+import lombok.Getter;
+
+@Getter
 public enum Permission {
 
     PUBLISH_POSTS("users.posts.rw"),

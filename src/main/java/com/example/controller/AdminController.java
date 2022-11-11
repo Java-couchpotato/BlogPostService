@@ -3,10 +3,9 @@ package com.example.controller;
 import com.example.dto.request.AdminRequestDto;
 import com.example.dto.request.EntryPasswordUpdateDTO;
 import com.example.dto.response.RegularAuthorsResponseDTO;
-import com.example.dto.response.UserRoleResponseDTO;
+import com.example.dto.response.AuthorRoleResponseDTO;
 import com.example.service.AdminService;
 import lombok.AllArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
@@ -26,7 +25,7 @@ public class AdminController {
 
     @PutMapping("users/{userId}/promote")
     public void promote(@PathVariable Long userId) {
-        adminService.promoteToAdmin();
+        adminService.promoteToAdmin(userId);
     }
 
     @PutMapping("users/{userId}/demote")
@@ -56,16 +55,16 @@ public class AdminController {
     }
 
     @PutMapping("users/{userId}/roles?reset-session=true")
-    public UserRoleResponseDTO grantRole() {
+    public AuthorRoleResponseDTO grantRole() {
         return adminService.grantUserRole();
     }
 
     @DeleteMapping("users/{userId}/roles?reset-session=true")
-    public UserRoleResponseDTO revokeRole() {
+    public AuthorRoleResponseDTO revokeRole() {
         return adminService.revokeUserRole();
     }
     @GetMapping("/roles")
-    public void showRoles(List<UserRoleResponseDTO>roleResponseDTO){
+    public void showRoles(List<AuthorRoleResponseDTO>roleResponseDTO){
         adminService.showAllRolesAvailable();
     }
 

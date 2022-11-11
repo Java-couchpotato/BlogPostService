@@ -1,8 +1,10 @@
 package com.example.controller;
 
+import com.example.dto.AuthorInfoDTO;
 import com.example.dto.request.PostCreateRequestDTO;
 import com.example.dto.request.PostSearchRequestDTO;
 import com.example.dto.request.PostUpdateRequestDTO;
+import com.example.dto.request.UserInfoDto;
 import com.example.dto.response.BlogPostCreateResponseDTO;
 import com.example.dto.response.BlogPostResponseByIdDTO;
 import com.example.dto.response.BlogPostSearchResponseDTO;
@@ -10,10 +12,11 @@ import com.example.entity.types.PostStatus;
 import com.example.service.PostService;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.Principal;
 import java.util.List;
 
 @RestController
@@ -21,16 +24,16 @@ import java.util.List;
 @RequestMapping("/posts")
 public class PostController {
 
-    @Autowired
-    private PostService blogPostService;
+
+    private final PostService blogPostService;
 
     @GetMapping
-    public List<BlogPostSearchResponseDTO> showPosts() {
-        return blogPostService.findLatestPosts();
+    public List<BlogPostSearchResponseDTO> showPosts( String principal) {
+        return blogPostService.findLatestPosts(principal);
     }
 
     @PostMapping("/create")
-    @ResponseStatus(HttpStatus.CREATED)
+    //@ResponseStatus(HttpStatus.CREATED)
     public BlogPostCreateResponseDTO createPost(
             @RequestBody PostCreateRequestDTO requestDTO) {
 
@@ -44,45 +47,45 @@ public class PostController {
         return blogPostService.searchPosts(requestDTO);
     }
 
-    @GetMapping("{id}")
-    public BlogPostResponseByIdDTO showPostsById(
-            @PathVariable Long blogId) {
+    @GetMapping("/{id}")
+    public BlogPostResponseByIdDTO showPostsById(@AuthenticationPrincipal UserInfoDto userInfoDto,
+            @PathVariable Long id) {
 
-        return blogPostService.findPostById(blogId);
+        return blogPostService.findPostById(id,userInfoDto);
     }
 
-    @PatchMapping("/{id}")
+    @PatchMapping("update/{id}")
     public void updateArticle(
             @RequestBody PostUpdateRequestDTO updateRequestDTO, @PathVariable Long id) {
 
         blogPostService.update(updateRequestDTO, id);
     }
 
-    @PutMapping("/{id}/{status}")
+    @PutMapping("/publish/{id}")
     public void setStatusPublish(
-            @PathVariable Long blogId,
-            @PathVariable PostStatus status
+            @PathVariable Long id,
+            @PathVariable PostStatus publish
     ) {
-        blogPostService.setStatusPublished(blogId);
+        blogPostService.setStatusPublished(id);
     }
 
-    @PutMapping("/{id}/{status1}")
+    @PutMapping("/unpublish/{id}")
     public void setStatusUnpublish(
-            @PathVariable Long blogId,
-            @PathVariable PostStatus status1
+            @PathVariable Long id,
+            @PathVariable PostStatus unpublish
     ) {
-        blogPostService.setStatusUnpublished(blogId);
+        blogPostService.setStatusUnpublished(id);
     }
 
-    @PutMapping("/{id}/{status2}")
+    @PutMapping("/block/{id}")
     public void setStatusBlock(
-            @PathVariable Long blogId,
-            @PathVariable PostStatus status2
+            @PathVariable Long id,
+            @PathVariable PostStatus block
     ) {
-        blogPostService.setStatusBlocked(blogId);
+        blogPostService.setStatusBlocked(id);
     }
 
-    @GetMapping("/{username}")
+    @GetMapping("/username/{username}")
     public List<BlogPostSearchResponseDTO> showPostByUser(
             @PathVariable String username
     ) {
@@ -90,7 +93,7 @@ public class PostController {
     }
 
     @PreAuthorize("hasAuthority('ADMIN')||#id==authentication.principal.blogUser.id")
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/delete/{id}")
     public void deleteArticle(
             @PathVariable Long id
           ) {

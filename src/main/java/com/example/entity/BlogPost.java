@@ -8,6 +8,7 @@ import org.springframework.data.annotation.LastModifiedDate;
 
 import javax.persistence.*;
 import java.time.Instant;
+import java.util.List;
 
 
 @AllArgsConstructor
@@ -36,8 +37,14 @@ public class BlogPost extends AbstractEntity {
     @Convert(converter = PostStatusConverter.class)
     private PostStatus status;
 
-    @Column(name = "tag")
-    private Tag tag;
+    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
+    @JoinTable(name = "post_tag",
+            joinColumns = {
+                    @JoinColumn(name = "blog_post_id", referencedColumnName = "id")},
+            inverseJoinColumns = {
+                    @JoinColumn(name = "tag_id", referencedColumnName = "id")
+            })
+    private List<Tag> tags;
 
     @Column(name = "updated_on")
     private Instant updatedOn;

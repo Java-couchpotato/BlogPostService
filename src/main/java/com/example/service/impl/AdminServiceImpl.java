@@ -1,10 +1,14 @@
 package com.example.service.impl;
 
 import com.example.dto.response.RegularAuthorsResponseDTO;
-import com.example.dto.response.UserRoleResponseDTO;
+import com.example.dto.response.AuthorRoleResponseDTO;
+import com.example.repository.AuthorRepository;
+import com.example.repository.BlogSessionRepository;
 import com.example.service.AdminService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import javax.transaction.Transactional;
 import java.util.List;
@@ -13,11 +17,14 @@ import java.util.List;
 @RequiredArgsConstructor
 @Transactional
 public class AdminServiceImpl implements AdminService {
-//    @Autowired
-//    private AdminRepository adminRepository;
-    @Override
-    public void promoteToAdmin() {
 
+    private final AuthorRepository authorRepository;
+    private final BlogSessionRepository sessionRepository;
+
+    @Override
+    public void promoteToAdmin(Long id) {
+        var author = authorRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+        author.setAdmin(true);
     }
 
     @Override
@@ -41,12 +48,12 @@ public class AdminServiceImpl implements AdminService {
     }
 
     @Override
-    public UserRoleResponseDTO grantUserRole() {
+    public AuthorRoleResponseDTO grantUserRole() {
         return null;
     }
 
     @Override
-    public UserRoleResponseDTO revokeUserRole() {
+    public AuthorRoleResponseDTO revokeUserRole() {
         return null;
     }
 

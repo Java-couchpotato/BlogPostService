@@ -27,7 +27,7 @@ public class ApplicationSecurityConfiguration {
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                 .authorizeRequests()
-                .antMatchers("/entry/registration", "/entry/login", "/public").permitAll()
+                .antMatchers("/entry/registration", "/entry/login", "/public","/posts").permitAll()
                 .anyRequest()
                 .authenticated()
                 ;

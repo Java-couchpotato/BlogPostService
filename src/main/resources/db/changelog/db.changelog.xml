@@ -22,9 +22,9 @@
             <column name="account_status" type="varchar(25)">
                 <constraints nullable="false"/>
             </column>
-<!--            <column name="roles" type="varchar(50)">-->
-<!--                <constraints nullable="false"/>-->
-<!--            </column>-->
+            <column name="role" type="varchar(50)">
+                <constraints nullable="false"/>
+            </column>
             <column name="updated_by_blog_author_id" type="bigint">
                 <constraints foreignKeyName="FK_BLOG_AUTHOR_BLOG_AUTHOR_ID_BLOG_AUTHOR_ID"
                              referencedTableName="blog_author"
@@ -44,9 +44,6 @@
             <column name="is_admin" type="boolean" defaultValueBoolean="false">
                 <constraints nullable="false"/>
             </column>
-            <column name="roles" type="varchar(255)">
-                <constraints nullable="false"/>
-            </column>
 
         </createTable>
 
@@ -64,19 +61,21 @@
             <column name="post_status" type="varchar(25)">
                 <constraints nullable="false"/>
             </column>
-
-            <column name="updated_on" type="DATETIME"/>
-            <column name="created_on" type="DATETIME" defaultValue="NOW()">
-                <constraints nullable="false"/>
-            </column>
-
             <column name="blog_author_id" type="bigint">
                 <constraints foreignKeyName="FK_BLOG_POST_BLOG_AUTHOR_ID_BLOG_AUTHOR_ID"
                              referencedTableName="blog_author"
                              referencedColumnNames="id"/>
 
             </column>
-            <!--ADD TAG COLUMN-->
+            <column name="updated_on" type="DATETIME"/>
+            <column name="created_on" type="DATETIME" defaultValue="NOW()">
+                <constraints nullable="false"/>
+            </column>
+            <column name="tag" type="varchar">
+                <constraints nullable="false"/>
+            </column>
+
+
         </createTable>
 
 
@@ -90,7 +89,8 @@
             <column name="blog_author_id" type="bigint">
                 <constraints nullable="false"
                              referencedTableName="blog_author"
-                             referencedColumnNames="id" foreignKeyName="BLOG_AUTHOR_BLOG_AUTHOR_ID_SESSION_BLOG_AUTHOR_ID"/>
+                             referencedColumnNames="id"
+                             foreignKeyName="BLOG_AUTHOR_BLOG_AUTHOR_ID_SESSION_BLOG_AUTHOR_ID"/>
             </column>
         </createTable>
 

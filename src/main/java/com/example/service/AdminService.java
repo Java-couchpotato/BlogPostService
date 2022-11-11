@@ -1,14 +1,14 @@
 package com.example.service;
 
 import com.example.dto.response.RegularAuthorsResponseDTO;
-import com.example.dto.response.UserRoleResponseDTO;
+import com.example.dto.response.AuthorRoleResponseDTO;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
 public interface AdminService {
-    void promoteToAdmin();
+    void promoteToAdmin(Long id);
 
     void demoteToUser();
 
@@ -18,9 +18,9 @@ public interface AdminService {
 
     void showRoles();
 
-    UserRoleResponseDTO grantUserRole();
+    AuthorRoleResponseDTO grantUserRole();
 
-    UserRoleResponseDTO revokeUserRole();
+    AuthorRoleResponseDTO revokeUserRole();
 
     void showAllRolesAvailable();
 }

@@ -1,13 +1,12 @@
 package com.example.configurations;
 
+import com.example.dto.AuthorInfoDTO;
 import com.example.entity.BlogAuthorSession;
-import com.example.entity.role.Role;
 import com.example.repository.BlogSessionRepository;
 import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
@@ -17,7 +16,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.List;
+import java.time.LocalDateTime;
 
 @Component
 @NoArgsConstructor
@@ -49,16 +48,17 @@ public class SecurityFilter extends OncePerRequestFilter {
             filterChain.doFilter(request, response);
             return;
         }
-
+//        if (blogSession.getExpirationTime().isBefore(LocalDateTime.now())) {
+//            sessionRepository.delete(blogSession);
+//            filterChain.doFilter(request, response);
+//            return;
+//        }
         var role = blogSession.getBlogAuthor().getRole();
-        var roles = role.equals(String.valueOf(Role.ADMIN)) ?
-                List.of(Role.USER, Role.ADMIN) :
-                List.of(Role.USER);
 
         Authentication key = new UsernamePasswordAuthenticationToken(
                 blogSession,
                 null,
-                roles.stream().map(x -> new SimpleGrantedAuthority(x.name())).toList()
+                role.getAuthorities()
         );
 
         SecurityContextHolder.getContext().setAuthentication(key);

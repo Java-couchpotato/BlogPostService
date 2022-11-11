@@ -3,10 +3,12 @@ spring:
     url: jdbc:postgresql://localhost:5432/blog
     username: root
     password: root
+
   jpa:
     hibernate:
-      ddl-auto: create-drop
+      ddl-auto: create
     show-sql: true
+
   liquibase:
     enabled: false
     change-log: db/changelog/db.changelog.xml
@@ -17,3 +19,6 @@ server:
   error:
     whitelabel:
       enabled: false
+
+
+

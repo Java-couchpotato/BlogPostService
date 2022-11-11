@@ -10,6 +10,5 @@ public record RegularAuthorsResponseDTO (
     String name,
     String username,
     boolean isAdmin,
-    boolean isRoAdmin,
     List<Role> roles){
 }

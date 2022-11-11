@@ -11,9 +11,7 @@ import org.springframework.data.annotation.LastModifiedDate;
 
 import javax.persistence.*;
 import java.time.Instant;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -39,10 +37,6 @@ public class BlogAuthor extends AbstractEntity{
     @Convert(converter = AccountStatusConverter.class)
     private AccountStatus accountStatus;
 
-    @Enumerated(EnumType.STRING)
-    @Column(name = "role")
-    private Role role;
-
     @ManyToOne
     @JoinColumn(name = "updated_by_blog_author_id")
     private BlogAuthor updatedBy;
@@ -61,6 +55,9 @@ public class BlogAuthor extends AbstractEntity{
 
     @Column(name = "is_admin")
     private boolean isAdmin;
+
+    @Column(name = "role")
+    private Role role;
 
 
 }

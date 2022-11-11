@@ -4,6 +4,7 @@ import lombok.*;
 import lombok.experimental.SuperBuilder;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -20,6 +21,10 @@ public class BlogAuthorSession extends AbstractEntity{
             nullable = false,
             updatable = false)
     private String sessionId;
+
+
+    @Column(name = "expiration_time")
+    private LocalDateTime expirationTime;
 
     @JoinColumn(name = "blog_author_id",nullable = false)
     @OneToOne
