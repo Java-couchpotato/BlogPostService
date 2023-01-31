@@ -1,9 +1,9 @@
 package com.example.service.impl;
 
-import com.example.dto.request.EntryPasswordUpdateDTO;
-import com.example.dto.request.LoginRequestDTO;
-import com.example.dto.request.RegistrationRequestDTO;
-import com.example.dto.response.LoginResponseDTO;
+import com.example.dto.entryDTO.EntryPasswordUpdateDTO;
+import com.example.dto.entryDTO.LoginRequestDTO;
+import com.example.dto.entryDTO.RegistrationRequestDTO;
+import com.example.dto.entryDTO.LoginResponseDTO;
 import com.example.entity.BlogAuthor;
 import com.example.entity.BlogAuthorSession;
 import com.example.entity.role.Role;
@@ -17,7 +17,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
-import java.util.Set;
 import java.util.UUID;
 
 @Slf4j
@@ -42,8 +41,8 @@ public class EntryServiceImpl implements EntryService {
                 .firstName(registrationRequestDTO.firstName())
                 .lastName(registrationRequestDTO.lastName())
                 .username(registrationRequestDTO.username())
-                .role(Role.ADMIN)
                 .build();
+        blogAuthor.setRole(Role.ADMIN);
 
         authorRepository.save(blogAuthor);
         passwordService.generateAndSavePassword(blogAuthor, registrationRequestDTO.password());
@@ -59,7 +58,6 @@ public class EntryServiceImpl implements EntryService {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
         }
         BlogAuthorSession blogAuthorSession = BlogAuthorSession.builder()
-                //.id(blogAuthor.getId())
                 .sessionId(UUID.randomUUID().toString())
                 .blogAuthor(blogAuthor)
                 .build();

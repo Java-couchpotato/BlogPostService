@@ -1,9 +1,9 @@
 package com.example.service;
 
-import com.example.dto.request.EntryPasswordUpdateDTO;
-import com.example.dto.request.LoginRequestDTO;
-import com.example.dto.request.RegistrationRequestDTO;
-import com.example.dto.response.LoginResponseDTO;
+import com.example.dto.entryDTO.EntryPasswordUpdateDTO;
+import com.example.dto.entryDTO.LoginRequestDTO;
+import com.example.dto.entryDTO.RegistrationRequestDTO;
+import com.example.dto.entryDTO.LoginResponseDTO;
 import com.example.entity.BlogAuthorSession;
 
 public interface EntryService {

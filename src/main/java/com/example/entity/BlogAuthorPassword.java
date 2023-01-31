@@ -13,7 +13,11 @@ import javax.persistence.*;
 
 @Entity
 @Table(name = "blog_author_password ")
-public class BlogAuthorPassword extends AbstractEntity{
+public class BlogAuthorPassword {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
+    private Long id;
 
     @Column(name = "password")
     private String password;

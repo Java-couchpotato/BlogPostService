@@ -1,7 +1,7 @@
 package com.example.service;
 
-import com.example.dto.response.AuthorResponseDTO;
-import com.example.dto.response.AuthorWithArticlesResponseDTO;
+import com.example.dto.authorDTO.AuthorResponseDTO;
+import com.example.dto.authorDTO.AuthorWithArticlesResponseDTO;
 
 
 import java.util.List;
@@ -10,5 +10,5 @@ public interface BlogAuthorService {
 
     public List<AuthorResponseDTO> showAuthorsByArticlesCount();
 
-    public List<AuthorWithArticlesResponseDTO> showAuthorsWithArticles();
+    public AuthorWithArticlesResponseDTO showAuthorsWithArticles(Long id);
 }

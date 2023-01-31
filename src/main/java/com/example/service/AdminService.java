@@ -1,20 +1,24 @@
 package com.example.service;
 
-import com.example.dto.response.RegularAuthorsResponseDTO;
-import com.example.dto.response.AuthorRoleResponseDTO;
+import com.example.dto.adminDTO.AdminShowAuthorsDTO;
+import com.example.dto.authorDTO.AuthorUpdateRequestDTO;
+import com.example.dto.entryDTO.PasswordDTO;
+import com.example.dto.authorDTO.AuthorRoleResponseDTO;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
 public interface AdminService {
-    void promoteToAdmin(Long id);
+    void promoteToAdmin(Long id,String role);
 
-    void demoteToUser();
+    void demoteToUser(Long id);
 
-    void udateUsersNameOrLastname();
+    void updateUsersNameOrLastname(AuthorUpdateRequestDTO updateRequestDTO,Long id);
 
-    List<RegularAuthorsResponseDTO> showsRegularUsersToAdmin();
+    List<AdminShowAuthorsDTO> showsRegularUsersToAdmin();
+
+    void resetPassword(Long id, Boolean resetSession, PasswordDTO passwordDTO);
 
     void showRoles();
 

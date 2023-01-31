@@ -1,6 +1,9 @@
 package com.example.entity.role;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import lombok.Getter;
+
+import java.util.Arrays;
 
 @Getter
 public enum Permission {
@@ -19,6 +22,18 @@ public enum Permission {
     Permission(String permission) {
         this.permission = permission;
     }
+
+    @JsonCreator
+    public static Permission findByExternalType(String type) {
+        if (type == null) {
+            return null;
+        }
+        return Arrays.stream(Permission.values()).
+                filter(x -> x.getPermission().equals(type))
+                .findFirst()
+                .orElse(null);
+    }
+
 
     public String getPermission() {
         return permission;

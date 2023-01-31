@@ -1,8 +1,7 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<databaseChangeLog
-        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
-        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.4.xsd">
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
 
     <changeSet id="1.0.0" author="java.couchpotato">
 
@@ -25,18 +24,18 @@
             <column name="role" type="varchar(50)">
                 <constraints nullable="false"/>
             </column>
-            <column name="updated_by_blog_author_id" type="bigint">
-                <constraints foreignKeyName="FK_BLOG_AUTHOR_BLOG_AUTHOR_ID_BLOG_AUTHOR_ID"
-                             referencedTableName="blog_author"
-                             referencedColumnNames="updated_by_blog_author_id"/>
+<!--            <column name="updated_by" type="bigint">-->
+<!--                <constraints foreignKeyName="FK_UPDATED_BY_BLOG_AUTHOR_UPDATED_BY_BLOG_AUTHOR"-->
+<!--                             referencedTableName="blog_author"-->
+<!--                             referencedColumnNames="updated_by"/>-->
 
-            </column>
-            <column name="created_by_blog_author_id" type="bigint">
-                <constraints foreignKeyName="FK_BLOG_AUTHOR_BLOG_AUTHOR_ID_BLOG_AUTHOR_ID"
-                             referencedTableName="blog_author"
-                             referencedColumnNames="created_by_blog_author_id"/>
+<!--            </column>-->
+<!--            <column name="created_by" type="bigint">-->
+<!--                <constraints foreignKeyName="FK_BLOG_AUTHOR_BLOG_AUTHOR_ID_BLOG_AUTHOR_ID"-->
+<!--                             referencedTableName="blog_author"-->
+<!--                             referencedColumnNames="created_by_blog_author_id"/>-->
 
-            </column>
+<!--            </column>-->
             <column name="updated_on" type="DATETIME"/>
             <column name="created_on" type="DATETIME" defaultValue="NOW()">
                 <constraints nullable="false"/>
@@ -106,7 +105,14 @@
                              referencedColumnNames="id"
                              foreignKeyName="BLOG_AUTHOR_BLOG_AUTHOR_PASSWORD_BLOG_AUTHOR_ID"/>
             </column>
-
         </createTable>
+
+        <createTable tableName="role_type">
+            <column name="role_name" type="varchar"/>
+            <column name="permission" type="varchar"/>
+        </createTable>
+
+
+
     </changeSet>
 </databaseChangeLog>

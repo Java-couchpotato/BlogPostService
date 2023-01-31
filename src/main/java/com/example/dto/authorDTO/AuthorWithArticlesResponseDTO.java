@@ -1,5 +1,6 @@
-package com.example.dto.response;
+package com.example.dto.authorDTO;
 
+import com.example.dto.postDTO.PostInfoResponseDTO;
 import lombok.*;
 
 import java.util.List;
@@ -9,6 +10,6 @@ public record AuthorWithArticlesResponseDTO(Long authorId,
                                             String authorFirstName,
                                             String authorLastName,
                                             String authorUsername,
-                                            List<BlogPostSearchResponseDTO> blogs) {
+                                            List<PostInfoResponseDTO> blogs) {
 
 }

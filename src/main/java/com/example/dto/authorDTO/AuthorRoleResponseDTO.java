@@ -1,5 +1,4 @@
-package com.example.dto.response;
-import com.example.entity.role.Permission;
+package com.example.dto.authorDTO;
 import com.example.entity.role.Role;
 import lombok.*;
 

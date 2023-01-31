@@ -1,15 +1,16 @@
-package com.example.dto.request;
+package com.example.dto.postDTO;
 
+import com.example.entity.Tag;
 import lombok.*;
+import org.springframework.core.metrics.StartupStep;
 
 import java.util.List;
-import java.util.Set;
 
 
 @Builder
 public record PostCreateRequestDTO ( String title,
                                      String body,
-                                     List<String> tagsList,
+                                     List<Tag> tagsList,
                                      Long authorId){
 
 

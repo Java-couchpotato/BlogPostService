@@ -1,4 +1,4 @@
-package com.example.dto;
+package com.example.dto.authorDTO;
 
 import com.example.entity.BlogAuthor;
 import lombok.AllArgsConstructor;

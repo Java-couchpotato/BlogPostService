@@ -1,4 +1,4 @@
-package com.example.dto.request;
+package com.example.dto.entryDTO;
 
 public record RegistrationRequestDTO(String firstName,
                                      String lastName,

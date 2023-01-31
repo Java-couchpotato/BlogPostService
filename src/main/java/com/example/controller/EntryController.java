@@ -1,28 +1,26 @@
 package com.example.controller;
 
-import com.example.dto.request.EntryPasswordUpdateDTO;
-import com.example.dto.request.LoginRequestDTO;
-import com.example.dto.request.RegistrationRequestDTO;
-import com.example.dto.response.LoginResponseDTO;
+import com.example.dto.entryDTO.EntryPasswordUpdateDTO;
+import com.example.dto.entryDTO.LoginRequestDTO;
+import com.example.dto.entryDTO.RegistrationRequestDTO;
+import com.example.dto.entryDTO.LoginResponseDTO;
 import com.example.entity.BlogAuthorSession;
-import com.example.repository.BlogSessionRepository;
-import com.example.service.BlogUserPasswordService;
 import com.example.service.EntryService;
 import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
 
 @RestController
 @AllArgsConstructor
 @RequestMapping("/entry")
 public class EntryController {
 
-    private EntryService entryService;
-    private BlogSessionRepository sessionRepository;
-    private BlogUserPasswordService passwordService;
+    private final EntryService entryService;
+//    private final BlogSessionRepository sessionRepository;
+//    private final BlogUserPasswordService passwordService;
 
     @PostMapping("/registration")
     public void register(@RequestBody RegistrationRequestDTO registrationRequestDTO) {
@@ -39,9 +37,10 @@ public class EntryController {
         entryService.logout(blogAuthorSession);
 
     }
-    @PreAuthorize("hasAuthority('USER')||#id==authentication.principal.blogUser.id")
+
+    @PreAuthorize("hasAuthority('USER')||#id==authentication.principal.blogAuthor.id")
     @PutMapping("/update-password")
-    public void setNewPassword(@RequestBody EntryPasswordUpdateDTO passwordUpdateDTO) {
+    public void setNewPassword(@RequestBody @Valid EntryPasswordUpdateDTO passwordUpdateDTO) {
         entryService.updatePassword(passwordUpdateDTO);
 
     }

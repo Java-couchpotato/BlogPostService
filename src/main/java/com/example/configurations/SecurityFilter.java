@@ -1,6 +1,5 @@
 package com.example.configurations;
 
-import com.example.dto.AuthorInfoDTO;
 import com.example.entity.BlogAuthorSession;
 import com.example.repository.BlogSessionRepository;
 import lombok.NoArgsConstructor;
@@ -16,7 +15,6 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.time.LocalDateTime;
 
 @Component
 @NoArgsConstructor

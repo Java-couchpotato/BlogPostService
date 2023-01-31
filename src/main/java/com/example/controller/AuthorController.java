@@ -1,34 +1,32 @@
 package com.example.controller;
 
-import com.example.dto.response.AuthorResponseDTO;
-import com.example.dto.response.AuthorWithArticlesResponseDTO;
+import com.example.dto.authorDTO.AuthorResponseDTO;
+import com.example.dto.authorDTO.AuthorWithArticlesResponseDTO;
 import com.example.service.BlogAuthorService;
-import lombok.AllArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.prepost.PreAuthorize;
+import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
 @RestController
-@AllArgsConstructor
+@RequiredArgsConstructor
 @RequestMapping("/authors")
 public class AuthorController {
 
-    @Autowired
-    private BlogAuthorService authorService;
+    private final BlogAuthorService authorService;
 
     @GetMapping("/show_authors")
-    @PreAuthorize("hasRole('ADMIN')")
+    //@PreAuthorize("#id==authentication.authorities.contains('admin.posts.ro')||#id==authentication.principal.blogAuthor.id")
     public List<AuthorResponseDTO>showAuthors(){
        return authorService.showAuthorsByArticlesCount();
     }
 
-    //@PreAuthorize("hasAuthority('USER')||#id==authentication.principal.blogUser.id")
+    //@PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/{id}")
-    public List<AuthorWithArticlesResponseDTO> showAuthorsWithArticles(){
-       return authorService.showAuthorsWithArticles();
+    public AuthorWithArticlesResponseDTO showAuthorsWithArticles( @PathVariable Long id){
+       return authorService.showAuthorsWithArticles(id);
     }
 }

@@ -16,7 +16,6 @@ import java.util.List;
 @Getter
 @Setter
 @SuperBuilder
-@ToString
 
 @Entity
 @Table(name = "blog_post ")

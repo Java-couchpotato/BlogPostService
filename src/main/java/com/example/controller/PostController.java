@@ -1,22 +1,17 @@
 package com.example.controller;
 
-import com.example.dto.AuthorInfoDTO;
-import com.example.dto.request.PostCreateRequestDTO;
-import com.example.dto.request.PostSearchRequestDTO;
-import com.example.dto.request.PostUpdateRequestDTO;
-import com.example.dto.request.UserInfoDto;
-import com.example.dto.response.BlogPostCreateResponseDTO;
-import com.example.dto.response.BlogPostResponseByIdDTO;
-import com.example.dto.response.BlogPostSearchResponseDTO;
-import com.example.entity.types.PostStatus;
+import com.example.dto.postDTO.PostCreateRequestDTO;
+import com.example.dto.postDTO.PostSearchRequestDTO;
+import com.example.dto.postDTO.PostUpdateRequestDTO;
+import com.example.dto.postDTO.PostCreateResponseDTO;
+import com.example.dto.postDTO.PostResponseByIdDTO;
+import com.example.dto.postDTO.PostSearchResponseDTO;
 import com.example.service.PostService;
 import lombok.AllArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
-import java.security.Principal;
 import java.util.List;
 
 @RestController
@@ -28,33 +23,34 @@ public class PostController {
     private final PostService blogPostService;
 
     @GetMapping
-    public List<BlogPostSearchResponseDTO> showPosts( String principal) {
-        return blogPostService.findLatestPosts(principal);
+    public List<PostSearchResponseDTO> showPosts() {
+        return blogPostService.findLatestPosts();
     }
 
     @PostMapping("/create")
-    //@ResponseStatus(HttpStatus.CREATED)
-    public BlogPostCreateResponseDTO createPost(
+    @ResponseStatus(HttpStatus.CREATED)
+    public PostCreateResponseDTO createPost(
             @RequestBody PostCreateRequestDTO requestDTO) {
 
         return blogPostService.create(requestDTO);
     }
 
     @PostMapping("/search")
-    public List<BlogPostSearchResponseDTO> searchPost(
+    public List<PostSearchResponseDTO> searchPost(
             @RequestBody PostSearchRequestDTO requestDTO) {
 
         return blogPostService.searchPosts(requestDTO);
     }
 
     @GetMapping("/{id}")
-    public BlogPostResponseByIdDTO showPostsById(@AuthenticationPrincipal UserInfoDto userInfoDto,
+    public PostResponseByIdDTO showPostsById(
             @PathVariable Long id) {
 
-        return blogPostService.findPostById(id,userInfoDto);
+        return blogPostService.findPostById(id);
     }
 
     @PatchMapping("update/{id}")
+    @PreAuthorize("hasAuthority('admin.posts.ro')||#id==authentication.principal.blogUser.id")
     public void updateArticle(
             @RequestBody PostUpdateRequestDTO updateRequestDTO, @PathVariable Long id) {
 
@@ -62,31 +58,32 @@ public class PostController {
     }
 
     @PutMapping("/publish/{id}")
+    @PreAuthorize("hasAuthority('user.posts.rw')")
     public void setStatusPublish(
-            @PathVariable Long id,
-            @PathVariable PostStatus publish
+            @PathVariable Long id
     ) {
         blogPostService.setStatusPublished(id);
     }
 
     @PutMapping("/unpublish/{id}")
+    @PreAuthorize("#id==authentication.principal.blogUser.id")
     public void setStatusUnpublish(
-            @PathVariable Long id,
-            @PathVariable PostStatus unpublish
+            @PathVariable Long id
     ) {
         blogPostService.setStatusUnpublished(id);
     }
 
     @PutMapping("/block/{id}")
-    public void setStatusBlock(
-            @PathVariable Long id,
-            @PathVariable PostStatus block
+
+    @PreAuthorize("hasAuthority('admin.posts.rw')")
+    public void setStatusBlockOrPublish(
+            @PathVariable Long id
     ) {
-        blogPostService.setStatusBlocked(id);
+        blogPostService.setStatusBlockOrPublish(id);
     }
 
     @GetMapping("/username/{username}")
-    public List<BlogPostSearchResponseDTO> showPostByUser(
+    public List<PostSearchResponseDTO> showPostByUser(
             @PathVariable String username
     ) {
         return blogPostService.showArticlesByUserName(username);
