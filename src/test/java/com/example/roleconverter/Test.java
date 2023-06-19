@@ -6,7 +6,7 @@ public class Test {
     }
 
     public void test12() {
-
+int a;
     }
 
     public void test22() {
