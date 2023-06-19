@@ -3,7 +3,7 @@
                    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
                    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
 
-    <changeSet id="1.0.0" author="java.couchpotato">
+    <changeSet id="1.0.0" author="alenaKilikli ">
 
         <createTable tableName="blog_author">
             <column name="id" type="bigint" autoIncrement="true">
@@ -24,18 +24,7 @@
             <column name="role" type="varchar(50)">
                 <constraints nullable="false"/>
             </column>
-<!--            <column name="updated_by" type="bigint">-->
-<!--                <constraints foreignKeyName="FK_UPDATED_BY_BLOG_AUTHOR_UPDATED_BY_BLOG_AUTHOR"-->
-<!--                             referencedTableName="blog_author"-->
-<!--                             referencedColumnNames="updated_by"/>-->
 
-<!--            </column>-->
-<!--            <column name="created_by" type="bigint">-->
-<!--                <constraints foreignKeyName="FK_BLOG_AUTHOR_BLOG_AUTHOR_ID_BLOG_AUTHOR_ID"-->
-<!--                             referencedTableName="blog_author"-->
-<!--                             referencedColumnNames="created_by_blog_author_id"/>-->
-
-<!--            </column>-->
             <column name="updated_on" type="DATETIME"/>
             <column name="created_on" type="DATETIME" defaultValue="NOW()">
                 <constraints nullable="false"/>

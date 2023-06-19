@@ -4,12 +4,14 @@ import com.example.dto.postDTO.PostInfoResponseDTO;
 import lombok.*;
 
 import java.util.List;
+import java.util.UUID;
 
 @Builder
-public record AuthorWithArticlesResponseDTO(Long authorId,
+public record AuthorWithArticlesResponseDTO(UUID authorId,
                                             String authorFirstName,
                                             String authorLastName,
                                             String authorUsername,
-                                            List<PostInfoResponseDTO> blogs) {
+                                            List<PostInfoResponseDTO>blogs
+) {
 
 }

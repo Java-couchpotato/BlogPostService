@@ -83,7 +83,7 @@ public class AdminServiceImpl implements AdminService {
         password.setPassword(encPas);
         passwordRepository.save(password);
 
-        if (resetSession) {
+        if (Boolean.TRUE.equals(resetSession)) {
             var sessions = sessionRepository.findAllByBlogAuthor(author);
             sessionRepository.deleteAll(sessions);
         }
@@ -93,9 +93,9 @@ public class AdminServiceImpl implements AdminService {
     @Override
     public List<AdminShowAuthorsDTO> showsRegularUsersToAdmin() {
         var authors = authorRepository.findAll();
-        if (AuthorityFinder.getAuthority().contains("admin.admins.ro")){
-            return DtoConverter.mapToAdminShowsListDto(authors) ;
-        }
+//        if (AuthorityFinder.getAuthority().contains("admin.admins.ro")){
+//            return DtoConverter.mapToAdminShowsListDto(authors) ;
+//        }
         return null;
     }
 

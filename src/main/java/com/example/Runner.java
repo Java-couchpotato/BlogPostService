@@ -28,11 +28,6 @@ public class Runner implements CommandLineRunner {
     private final AuthorRepository userRepository;
     private final PostRepository postRepository;
 
-    public static void main(String[] args) {
-
-    }
-
-
     @Override
     public void run(String... args) {
 
@@ -120,7 +115,9 @@ public class Runner implements CommandLineRunner {
                 .tags(tags2)
                 .createdOn(Instant.now())
                 .build();
-        postRepository.save(post3); BlogPost post4 = BlogPost.builder()
+        postRepository.save(post3);
+
+        BlogPost post4 = BlogPost.builder()
                 .title("laugh")
                 .body("You can't deny laughter; when it comes, it plops down in your favorite chair and stays as long as it wants.")
                 .author(user2)

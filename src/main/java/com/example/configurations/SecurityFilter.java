@@ -46,11 +46,6 @@ public class SecurityFilter extends OncePerRequestFilter {
             filterChain.doFilter(request, response);
             return;
         }
-//        if (blogSession.getExpirationTime().isBefore(LocalDateTime.now())) {
-//            sessionRepository.delete(blogSession);
-//            filterChain.doFilter(request, response);
-//            return;
-//        }
         var role = blogSession.getBlogAuthor().getRole();
 
         Authentication key = new UsernamePasswordAuthenticationToken(
@@ -64,3 +59,4 @@ public class SecurityFilter extends OncePerRequestFilter {
         filterChain.doFilter(request, response);
     }
 }
+

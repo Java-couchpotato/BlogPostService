@@ -5,33 +5,29 @@ import com.example.entity.role.Role;
 import com.example.entity.types.AccountStatus;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
-import org.springframework.data.annotation.CreatedBy;
-import org.springframework.data.annotation.LastModifiedBy;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
 import java.time.Instant;
+import java.util.List;
+import java.util.UUID;
 
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
 @Setter
 @SuperBuilder
-
 @ToString
 @Entity
 @Table(name = "blog_author")
 @EntityListeners(AuditingEntityListener.class)
-//@MappedSuperclass
-public class BlogAuthor<U> extends AbstractEntity {
-//    @CreatedBy
-//    @Column(name = "updated_by")
-//    private U updatedBy;
-//
-//    @LastModifiedBy
-//    @Column(name = "created_by")
-//    private U createdBy;
+public class BlogAuthor {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
+    private UUID id;
 
     @Column(name = "updated_on")
     @LastModifiedDate
@@ -57,6 +53,10 @@ public class BlogAuthor<U> extends AbstractEntity {
 
     @Column(name = "roles")
     private Role role;
+
+    @OneToMany
+    @JoinColumn(name = "blog_post_id")
+    private List<BlogPost>posts;
 
     @Column(name = "is_admin")
     private boolean isAdmin;

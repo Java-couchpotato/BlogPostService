@@ -1,6 +1,5 @@
 package com.example.configurations;
 
-import com.example.repository.BlogSessionRepository;
 import lombok.SneakyThrows;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -11,9 +10,8 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
-@Configuration
 @EnableWebSecurity
-@EnableMethodSecurity(prePostEnabled = true,securedEnabled = true,jsr250Enabled = true)
+@EnableMethodSecurity(securedEnabled = true,jsr250Enabled = true)
 public class ApplicationSecurityConfiguration {
 
     @Bean
@@ -27,7 +25,7 @@ public class ApplicationSecurityConfiguration {
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                 .authorizeRequests()
-                .antMatchers("/entry/registration", "/entry/login", "/public","/posts").permitAll()
+                .antMatchers("/entry/registration", "/entry/login", "/public","/posts","/swagger-ui/**","/v3/api-docs/**").permitAll()
                 .anyRequest()
                 .authenticated()
                 ;

@@ -5,6 +5,7 @@ import lombok.experimental.SuperBuilder;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 
 @AllArgsConstructor
@@ -14,8 +15,11 @@ import java.time.LocalDateTime;
 @Setter
 @Table(name = "blog_author_session")
 @Entity
-public class BlogAuthorSession extends AbstractEntity{
-
+public class BlogAuthorSession {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
+    private UUID id;
 
     @Column(name = "session_id",
             unique = true,

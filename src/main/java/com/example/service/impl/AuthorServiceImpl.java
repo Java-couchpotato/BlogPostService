@@ -2,77 +2,80 @@ package com.example.service.impl;
 
 import com.example.dto.authorDTO.AuthorResponseDTO;
 import com.example.dto.authorDTO.AuthorWithArticlesResponseDTO;
+import com.example.dto.postDTO.PostInfoResponseDTO;
 import com.example.entity.BlogAuthor;
 import com.example.entity.BlogPost;
 import com.example.entity.types.PostStatus;
 import com.example.repository.AuthorRepository;
 import com.example.repository.PostRepository;
-import com.example.service.BlogAuthorService;
-import com.example.utils.AuthorityFinder;
-import com.example.utils.DtoConverter;
+import com.example.service.AuthorService;
+import com.example.utils.PostMapper;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
+import org.webjars.NotFoundException;
 
 import javax.transaction.Transactional;
-import java.util.Comparator;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
+import java.util.UUID;
 
 
 @RequiredArgsConstructor
 @Service
 @Transactional
-public class AuthorServiceImpl implements BlogAuthorService {
+public class AuthorServiceImpl implements AuthorService {
 
-    private final AuthorRepository authorRepository;
+    private AuthorRepository authorRepository;
 
-    private final PostRepository postRepository;
+    private PostRepository postRepository;
+
+    private PostMapper postMapper;
+
+    public AuthorServiceImpl(AuthorRepository authorRepository, PostRepository postRepository, PostMapper postMapper) {
+        this.authorRepository = authorRepository;
+        this.postRepository = postRepository;
+        this.postMapper = postMapper;
+    }
 
 
-    @Override
     public List<AuthorResponseDTO> showAuthorsByArticlesCount() {
+        List<BlogAuthor> authors = authorRepository.findAll();
+        List<AuthorResponseDTO> authorDTOs = new ArrayList<>();
 
-        return getMapOfAuthorAndPublishedPosts().entrySet().stream()
-                .map(a -> DtoConverter.mapToAuthorByCountDto(a.getKey(), a.getValue().size())).toList()
-                .stream().sorted(Comparator.comparing(AuthorResponseDTO::blogsCount).reversed()).toList();
-
-
-    }
-
-    private Map<BlogAuthor, List<BlogPost>> getMapOfAuthorAndPublishedPosts() {
-        return postRepository.findAll().stream()
-                .filter(k -> k.getStatus().equals(PostStatus.PUBLISHED))
-                .collect(Collectors.groupingBy(BlogPost::getAuthor));
-    }
-
-
-    @Override
-    public AuthorWithArticlesResponseDTO showAuthorsWithArticles(Long id) {
-        AuthorWithArticlesResponseDTO authorPosts;
-        var author = authorRepository.findById(id)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND
-                        , String.format("Author with id %d does not exists", id)));
-
-        var posts = postRepository.findAllByAuthorIdOrderByCreatedOnDesc(author.getId())
-                .stream()
-                .map(DtoConverter::mapToDtoAuthorBlogs).toList();
-
-        var postsPublished = postRepository.findAllByAuthorIdOrderByCreatedOnDesc(author.getId())
-                .stream()
-                .filter(p -> p.getStatus().equals(PostStatus.PUBLISHED))
-                .map(DtoConverter::mapToDtoAuthorBlogs).toList();
-
-
-        if (AuthorityFinder.getAuthority().contains("admin.posts.ro")) {
-            authorPosts = DtoConverter.mapToAuthorAndArticles(author, posts);
-        } else {
-            authorPosts = DtoConverter.mapToAuthorAndArticles(author, postsPublished);
+        for (BlogAuthor author : authors) {
+            int publishedArticlesCount = (int) author.getPosts().stream()
+                    .filter(post -> post.getStatus() == PostStatus.PUBLISHED)
+                    .count();
+            authorDTOs.add(new AuthorResponseDTO(
+                    author.getId(),
+                    author.getFirstName(),
+                    author.getLastName(),
+                    author.getUsername(),
+                    publishedArticlesCount
+            ));
         }
 
-
-        return authorPosts;
+        return authorDTOs;
     }
+
+
+    public AuthorWithArticlesResponseDTO showAuthorsWithArticlesById(UUID id) {
+
+        BlogAuthor author = authorRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException("Author not found with id: " + id));
+
+        List<BlogPost> posts = postRepository.findByAuthorAndStatusOrderByCreatedOnDesc(author, PostStatus.PUBLISHED);
+
+        List<PostInfoResponseDTO> postInfoDTOs = postMapper.mapToPostInfoResponseDTO(posts);
+
+        return new AuthorWithArticlesResponseDTO(author.getId(),
+                author.getFirstName(),
+                author.getLastName(),
+                author.getUsername(),
+                postInfoDTOs);
+    }
+
 }
+
+
+

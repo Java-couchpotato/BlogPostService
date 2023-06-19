@@ -1,9 +1,9 @@
 package com.example.controller;
 
-import com.example.dto.postDTO.PostCreateRequestDTO;
+import com.example.dto.postDTO.PostCreateResponseDTO;
 import com.example.dto.postDTO.PostSearchRequestDTO;
 import com.example.dto.postDTO.PostUpdateRequestDTO;
-import com.example.dto.postDTO.PostCreateResponseDTO;
+import com.example.dto.postDTO.PostCreateRequestDTO;
 import com.example.dto.postDTO.PostResponseByIdDTO;
 import com.example.dto.postDTO.PostSearchResponseDTO;
 import com.example.service.PostService;
@@ -13,6 +13,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 @AllArgsConstructor
@@ -29,8 +30,8 @@ public class PostController {
 
     @PostMapping("/create")
     @ResponseStatus(HttpStatus.CREATED)
-    public PostCreateResponseDTO createPost(
-            @RequestBody PostCreateRequestDTO requestDTO) {
+    public PostCreateRequestDTO createPost(
+            @RequestBody PostCreateResponseDTO requestDTO) {
 
         return blogPostService.create(requestDTO);
     }
@@ -44,7 +45,7 @@ public class PostController {
 
     @GetMapping("/{id}")
     public PostResponseByIdDTO showPostsById(
-            @PathVariable Long id) {
+            @PathVariable UUID id) {
 
         return blogPostService.findPostById(id);
     }
@@ -52,7 +53,7 @@ public class PostController {
     @PatchMapping("update/{id}")
     @PreAuthorize("hasAuthority('admin.posts.ro')||#id==authentication.principal.blogUser.id")
     public void updateArticle(
-            @RequestBody PostUpdateRequestDTO updateRequestDTO, @PathVariable Long id) {
+            @RequestBody PostUpdateRequestDTO updateRequestDTO, @PathVariable UUID id) {
 
         blogPostService.update(updateRequestDTO, id);
     }
@@ -60,7 +61,7 @@ public class PostController {
     @PutMapping("/publish/{id}")
     @PreAuthorize("hasAuthority('user.posts.rw')")
     public void setStatusPublish(
-            @PathVariable Long id
+            @PathVariable UUID id
     ) {
         blogPostService.setStatusPublished(id);
     }
@@ -68,7 +69,7 @@ public class PostController {
     @PutMapping("/unpublish/{id}")
     @PreAuthorize("#id==authentication.principal.blogUser.id")
     public void setStatusUnpublish(
-            @PathVariable Long id
+            @PathVariable UUID id
     ) {
         blogPostService.setStatusUnpublished(id);
     }
@@ -77,7 +78,7 @@ public class PostController {
 
     @PreAuthorize("hasAuthority('admin.posts.rw')")
     public void setStatusBlockOrPublish(
-            @PathVariable Long id
+            @PathVariable UUID id
     ) {
         blogPostService.setStatusBlockOrPublish(id);
     }
@@ -92,7 +93,7 @@ public class PostController {
     @PreAuthorize("hasAuthority('ADMIN')||#id==authentication.principal.blogUser.id")
     @DeleteMapping("/delete/{id}")
     public void deleteArticle(
-            @PathVariable Long id
+            @PathVariable UUID id
           ) {
 
         blogPostService.deleteById(id);

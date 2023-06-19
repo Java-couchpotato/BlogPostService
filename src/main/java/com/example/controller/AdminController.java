@@ -72,7 +72,7 @@ public class AdminController {
     }
 
     @GetMapping("/roles")
-    public void showRoles(List<AuthorRoleResponseDTO> roleResponseDTO) {
+    public void showRoles() {
         adminService.showAllRolesAvailable();
     }
 

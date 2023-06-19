@@ -19,8 +19,6 @@ import javax.validation.Valid;
 public class EntryController {
 
     private final EntryService entryService;
-//    private final BlogSessionRepository sessionRepository;
-//    private final BlogUserPasswordService passwordService;
 
     @PostMapping("/registration")
     public void register(@RequestBody RegistrationRequestDTO registrationRequestDTO) {

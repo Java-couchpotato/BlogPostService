@@ -9,6 +9,7 @@ import org.springframework.data.annotation.LastModifiedDate;
 import javax.persistence.*;
 import java.time.Instant;
 import java.util.List;
+import java.util.UUID;
 
 
 @AllArgsConstructor
@@ -19,7 +20,11 @@ import java.util.List;
 
 @Entity
 @Table(name = "blog_post ")
-public class BlogPost extends AbstractEntity {
+public class BlogPost {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
+    private UUID id;
 
     @Column(name = "title")
     private String title;
@@ -53,3 +58,4 @@ public class BlogPost extends AbstractEntity {
     private Instant createdOn;
 
 }
+

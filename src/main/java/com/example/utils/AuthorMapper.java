@@ -1,24 +1,27 @@
 package com.example.utils;
 
-import com.example.dto.postDTO.*;
+import com.example.dto.adminDTO.AdminShowAuthorsDTO;
+import com.example.dto.authorDTO.AuthorResponseDTO;
+import com.example.dto.authorDTO.AuthorWithArticlesResponseDTO;
+import com.example.dto.postDTO.PostInfoResponseDTO;
+import com.example.entity.BlogAuthor;
 import com.example.entity.BlogPost;
 import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
+
+import java.util.List;
 
 @Mapper(componentModel = "spring")
 public interface AuthorMapper {
 
-    PostCreateRequestDTO toRequestCreatePostDto(BlogPost post);
+    AuthorResponseDTO mapToAuthorByCountDto(BlogAuthor blogAuthor);
 
-    PostCreateResponseDTO toResponseCreatePostDto(BlogPost post);
+    AdminShowAuthorsDTO mapToAdminShows(BlogAuthor author);
 
-    PostInfoResponseDTO toPostInfo(BlogPost post);
+    List<AdminShowAuthorsDTO> mapToAdminShowsListDto(List<BlogAuthor> blogAuthors);
 
-    PostResponseByIdDTO toPostResponseId(BlogPost post);
+    AuthorWithArticlesResponseDTO mapToAuthorAndArticles(BlogAuthor author);
 
-    PostSearchRequestDTO toPostSearchRequest(BlogPost post);
+    PostInfoResponseDTO mapToDtoAuthorBlogs(BlogPost blogPost);
 
-    PostSearchResponseDTO toPostSearchResponse(BlogPost post);
-
-    PostUpdateRequestDTO toPostUpdate(BlogPost post);
+    List<AuthorResponseDTO> mapToResponseDtoList(List<BlogAuthor>author);
 }

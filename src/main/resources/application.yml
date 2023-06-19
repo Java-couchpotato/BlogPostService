@@ -1,4 +1,9 @@
 spring:
+  security:
+#    user:
+#      roles: admin
+#      name: root
+#      password: root
   datasource:
     url: jdbc:postgresql://localhost:5432/blog
     username: root
@@ -6,7 +11,7 @@ spring:
 
   jpa:
     hibernate:
-      ddl-auto: create
+      ddl-auto: create-drop
     show-sql: true
 
   liquibase:

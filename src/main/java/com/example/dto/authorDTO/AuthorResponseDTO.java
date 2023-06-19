@@ -2,11 +2,13 @@ package com.example.dto.authorDTO;
 
 import lombok.*;
 
+import java.util.UUID;
+
 @Builder
-public record AuthorResponseDTO (Long authorId,
-                                 String authorFirstName,
-                                 String authorLastName,
-                                 String authorUsername,
-                                 int blogsCount){
+public record AuthorResponseDTO(UUID authorId,
+                                String authorFirstName,
+                                String authorLastName,
+                                String authorUsername,
+                                int blogsCount){
 
 }

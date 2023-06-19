@@ -1,17 +1,19 @@
 package com.example.dto.postDTO;
 
 import com.example.entity.Tag;
-import lombok.*;
-import org.springframework.core.metrics.StartupStep;
+import com.example.entity.types.PostStatus;
+import lombok.Builder;
 
 import java.util.List;
-
+import java.util.UUID;
 
 @Builder
-public record PostCreateRequestDTO ( String title,
-                                     String body,
-                                     List<Tag> tagsList,
-                                     Long authorId){
+public record PostCreateRequestDTO(UUID id,
+                                   String title,
+                                   String body,
+                                   List<Tag> tags,
+                                   PostStatus status,
+                                   UUID authorId) {
 
 
 }

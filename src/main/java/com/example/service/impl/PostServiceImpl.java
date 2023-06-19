@@ -1,9 +1,9 @@
 package com.example.service.impl;
 
-import com.example.dto.postDTO.PostCreateRequestDTO;
+import com.example.dto.postDTO.PostCreateResponseDTO;
 import com.example.dto.postDTO.PostSearchRequestDTO;
 import com.example.dto.postDTO.PostUpdateRequestDTO;
-import com.example.dto.postDTO.PostCreateResponseDTO;
+import com.example.dto.postDTO.PostCreateRequestDTO;
 import com.example.dto.postDTO.PostResponseByIdDTO;
 import com.example.dto.postDTO.PostSearchResponseDTO;
 import com.example.entity.BlogAuthor;
@@ -15,7 +15,8 @@ import com.example.repository.PostRepository;
 import com.example.repository.TagRepository;
 import com.example.service.PostService;
 import com.example.utils.AuthorityFinder;
-import com.example.utils.DtoConverter;
+import com.example.utils.PostMapper;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -27,31 +28,21 @@ import javax.persistence.Query;
 import javax.transaction.Transactional;
 import java.time.Instant;
 import java.time.LocalDateTime;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Transactional
 @Slf4j
 @Service
+@RequiredArgsConstructor
 public class PostServiceImpl implements PostService {
 
     private final PostRepository postRepository;
     private final AuthorRepository authorRepository;
     private final TagRepository tagRepository;
-    // @PersistenceContext // == @Autowired for EntityManager
+    private final PostMapper mapper;
+
     @PersistenceContext
     private EntityManager entityManager;
-
-
-    public PostServiceImpl(PostRepository postRepository, AuthorRepository authorRepository, EntityManager entityManager, TagRepository tagRepository) {
-        this.postRepository = postRepository;
-        this.authorRepository = authorRepository;
-        this.entityManager = entityManager;
-        this.tagRepository = tagRepository;
-    }
-
 
     @Override
     public List<PostSearchResponseDTO> findLatestPosts() {
@@ -63,35 +54,34 @@ public class PostServiceImpl implements PostService {
         } else {
             posts = postRepository.findAllByStatus(PostStatus.PUBLISHED);
         }
-        return posts.stream()
+        return mapper.mapToDtoListSearch(posts.stream()
                 .sorted(Comparator.comparing(BlogPost::getCreatedOn).reversed())
-                .map(DtoConverter::mapToDto)
-                .toList();
+                .toList());
     }
 
 
     @Override
-    public PostCreateResponseDTO create(PostCreateRequestDTO postCreateRequestDTO) {
+    public PostCreateRequestDTO create(PostCreateResponseDTO postCreateResponseDTO) {
 
-        BlogAuthor author = authorRepository.findById(postCreateRequestDTO.authorId())
+        BlogAuthor author = authorRepository.findById(postCreateResponseDTO.authorId())
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.UPGRADE_REQUIRED,
-                        String.format("Blog with ID %d is in status [INACTIVE]", postCreateRequestDTO.authorId())));
+                        String.format("Blog with ID %d is in status [INACTIVE]", postCreateResponseDTO.authorId())));
 
 
-        List<Tag> tagsList = postCreateRequestDTO.tagsList().stream()
+        List<Tag> tagsList = postCreateResponseDTO.tagsList().stream()
                 .map((Tag str) -> getTag(String.valueOf(str)))
                 .toList();
 
         BlogPost blogPost = BlogPost.builder()
-                .title(postCreateRequestDTO.title())
-                .body(postCreateRequestDTO.body())
+                .title(postCreateResponseDTO.title())
+                .body(postCreateResponseDTO.body())
                 .tags(tagsList)
                 .status(PostStatus.PUBLISHED)
                 .author(author)
                 .createdOn(Instant.from(LocalDateTime.now()))
                 .updatedOn(Instant.from(LocalDateTime.now())).build();
 
-        return DtoConverter.mapToDtoCreate((postRepository.save(blogPost)));
+        return mapper.mapToDtoCreate(postRepository.save(blogPost));
     }
 
     private Tag getTag(String str) {
@@ -107,7 +97,7 @@ public class PostServiceImpl implements PostService {
 
     @Override
     public List searchPosts(PostSearchRequestDTO request) {
-        //TODO SEARCHING
+
         Map<String, Object> searchParams = new HashMap<>();
         StringBuilder query = new StringBuilder();
 
@@ -131,28 +121,27 @@ public class PostServiceImpl implements PostService {
 
         Query emQuery = entityManager.createQuery(query.toString());
 
-//        searchParams.forEach((k, v) -> emQuery.setParameter(k, v));
         searchParams.forEach(emQuery::setParameter);
 
         return emQuery.getResultList();
     }
 
     @Override
-    public PostResponseByIdDTO findPostById(Long id) {
+    public PostResponseByIdDTO findPostById(UUID id) {
 
         BlogPost post = postRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
 
         if (AuthorityFinder.getAuthority().contains("admin.posts.ro")) {
-           return DtoConverter.mapToDtoById(post);
+           return mapper.entityToDtoById(post);
         } else {
             post = postRepository.findBlogPostByIdAndStatus(id, PostStatus.PUBLISHED);
         }
-        return DtoConverter.mapToDtoById(post);
+        return mapper.entityToDtoById(post);
     }
 
 
     @Override
-    public void update(PostUpdateRequestDTO updateRequestDTO, Long postId) {
+    public void update(PostUpdateRequestDTO updateRequestDTO, UUID postId) {
 
         BlogPost blogPost = postRepository.findById(postId).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
 
@@ -167,7 +156,7 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public void setStatusBlockOrPublish(Long id) {
+    public void setStatusBlockOrPublish(UUID id) {
 
         BlogPost post = postRepository.findById(id).orElseThrow();
 
@@ -182,7 +171,7 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public void setStatusUnpublished(Long id) {
+    public void setStatusUnpublished(UUID id) {
 
         BlogPost post = postRepository.findById(id).orElseThrow();
 
@@ -193,7 +182,7 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public void setStatusPublished(Long id) {
+    public void setStatusPublished(UUID id) {
 
         BlogPost post = postRepository.findById(id).orElseThrow();
 
@@ -211,15 +200,12 @@ public class PostServiceImpl implements PostService {
         } else {
             posts = postRepository.findAllByAuthor_UsernameAndStatus(name,PostStatus.PUBLISHED);
         }
-        return posts
-                .stream()
-                .map(DtoConverter::mapToDtoSearch)
-                .toList();
+        return mapper.mapToDtoListSearch(posts);
 
     }
 
     @Override
-    public void deleteById(long postId) {
+    public void deleteById(UUID postId) {
 
         postRepository.deleteById(postId);
         log.info("Post with ID = {} deleted", postId);

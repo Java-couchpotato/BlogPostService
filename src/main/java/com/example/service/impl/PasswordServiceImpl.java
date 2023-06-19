@@ -37,7 +37,7 @@ public class PasswordServiceImpl implements BlogUserPasswordService {
 
     @Override
     public BlogAuthor getMatchedAccount(String username, String password) {
-        BlogAuthor blogAuthor = userRepository.findByUsername(username);
+        var blogAuthor = userRepository.findByUsername(username);
 
         if (blogAuthor == null) {
             return null;

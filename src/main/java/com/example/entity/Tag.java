@@ -6,6 +6,7 @@ import javax.persistence.*;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 @Entity
 @Table(name = "tag")
@@ -15,7 +16,11 @@ import java.util.List;
 @Getter
 @Setter
 @Builder
-public class Tag extends AbstractEntity implements Serializable {
+public class Tag implements Serializable {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
+    private UUID id;
 
     @Column(name = "text")
     private String text;
