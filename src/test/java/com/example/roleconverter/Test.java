@@ -10,6 +10,6 @@ int a;
     }
 
     public void test22() {
-
+int b;
     }
 }
